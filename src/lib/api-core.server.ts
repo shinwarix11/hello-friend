@@ -567,6 +567,29 @@ const handlers: Record<string, (ctx: Ctx) => Promise<unknown>> = {
     return { valid: true, user: publicUser(user), license, expires_at: session.expires_at };
   },
 
+  async log(ctx) {
+    const message = str(ctx.body, "message")!.slice(0, 2000);
+    const pcuser = str(ctx.body, "pcuser", false);
+    const hwid = str(ctx.body, "hwid", false);
+
+    // Client logs are accepted with or without an active session — a session
+    // simply links the entry to the end user when one exists.
+    let appUserId: string | null = null;
+    try {
+      const { session } = await resolveSession(ctx);
+      appUserId = session.app_user_id;
+    } catch {
+      /* anonymous client log */
+    }
+
+    await logAuth(ctx, "log", true, message, {
+      app_user_id: appUserId,
+      hwid,
+      metadata: pcuser ? { pcuser } : {},
+    });
+    return { logged: true };
+  },
+
   async "license/validate"(ctx) {
     const key = str(ctx.body, "license_key")!;
     const hwid = str(ctx.body, "hwid", false);

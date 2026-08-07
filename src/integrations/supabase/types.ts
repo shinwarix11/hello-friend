@@ -1452,6 +1452,7 @@ export type Database = {
         | "version"
         | "download"
         | "error"
+        | "log"
       license_status: "unused" | "active" | "expired" | "suspended" | "banned"
       subscription_status: "active" | "paused" | "archived"
       webhook_delivery_status: "pending" | "success" | "failed"
@@ -1628,6 +1629,7 @@ export const Constants = {
         "version",
         "download",
         "error",
+        "log",
       ],
       license_status: ["unused", "active", "expired", "suspended", "banned"],
       subscription_status: ["active", "paused", "archived"],

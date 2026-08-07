@@ -106,6 +106,7 @@ export const AUTH_LOG_LABELS: Record<AuthLogKind, string> = {
   version: "Version check",
   download: "Downloads",
   error: "Error",
+  log: "Client log",
 };
 
 export const API_SCOPES = [

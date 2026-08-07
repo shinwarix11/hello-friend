@@ -1,0 +1,1 @@
+ALTER TYPE public.auth_log_kind ADD VALUE IF NOT EXISTS 'log';

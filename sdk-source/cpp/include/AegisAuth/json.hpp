@@ -9,7 +9,7 @@
 #include <variant>
 #include <vector>
 
-namespace aegis {
+namespace aegisauth {
 
 class Json;
 using JsonObject = std::map<std::string, Json>;
@@ -227,4 +227,4 @@ private:
     }
 };
 
-}  // namespace aegis
+}  // namespace aegisauth

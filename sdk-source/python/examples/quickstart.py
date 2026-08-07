@@ -1,52 +1,57 @@
-"""Runnable quickstart for the Aegis Python SDK.
-
-    AEGIS_BASE_URL=https://your-aegis-host AEGIS_APP_KEY=pk_live_... python examples/quickstart.py
-"""
+"""AegisAuth quickstart — classic authentication flow."""
 import os
 import sys
-import time
 
+# Allow running straight from the examples/ folder.
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
-from aegis import Aegis, AegisError  # noqa: E402
+from aegis_auth import AegisAuth  # noqa: E402
+
+aegis_app = AegisAuth(
+    name="My Application",
+    ownerid="YOUR-APPLICATION-KEY",  # Application Key from the dashboard
+    secret="",                       # leave empty for client-side use
+    version="1.0.0",
+)
 
 
-def main() -> int:
-    client = Aegis(
-        base_url=os.environ.get("AEGIS_BASE_URL", "http://localhost:8080"),
-        app_key=os.environ.get("AEGIS_APP_KEY", ""),
-        version="1.0.0",
-    )
+def main() -> None:
+    aegis_app.init()
+    if not aegis_app.response.success:
+        print("init failed:", aegis_app.response.message)
+        return
 
-    info = client.init()
-    print("Initialized:", info.get("status"))
+    print("App version :", aegis_app.app_data.app_ver)
+    print("HWID        :", aegis_app.hwid)
+    print()
+    print("[1] Login")
+    print("[2] Register")
+    print("[3] License key only")
+    choice = input("Choice: ").strip()
 
-    version = info.get("version") or {}
-    if version.get("update_required"):
-        print("Mandatory update:", version.get("latest"), version.get("download_url"))
-        return 0
+    if choice == "1":
+        aegis_app.login(input("Username: "), input("Password: "))
+    elif choice == "2":
+        user = input("Username: ")
+        password = input("Password: ")
+        key = input("License key (optional): ").strip()
+        aegis_app.register(user, password, key or None)
+    else:
+        aegis_app.license(input("License key: ").strip())
 
-    result = client.login(
-        os.environ.get("AEGIS_USERNAME", "demo"),
-        os.environ.get("AEGIS_PASSWORD", "demo-password"),
-    )
-    license_info = result.get("license") or {}
-    print("Signed in as", result["user"]["username"], "license:", license_info.get("status", "none"))
+    if not aegis_app.response.success:
+        print("Failed:", aegis_app.response.message)
+        return
 
-    print("User variables:", client.get_variables("user").get("variables"))
-    client.set_variable("last_seen", time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()))
+    print()
+    print("Welcome", aegis_app.user_data.username or "license holder")
+    print("Days left:", aegis_app.expirydaysleft())
 
-    with client.start_heartbeat(interval=60, on_revoked=lambda reason: print("Session revoked:", reason)):
-        time.sleep(2)
+    aegis_app.log("User opened the quickstart")
+    print("Server says:", aegis_app.var("welcome_message") or "(no welcome_message variable)")
 
-    client.logout()
-    print("Signed out.")
-    return 0
+    aegis_app.logout()
 
 
 if __name__ == "__main__":
-    try:
-        raise SystemExit(main())
-    except AegisError as error:
-        print(f"Aegis error [{error.code}] {error.message}", file=sys.stderr)
-        raise SystemExit(1)
+    main()

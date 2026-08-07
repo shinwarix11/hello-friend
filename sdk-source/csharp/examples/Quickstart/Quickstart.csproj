@@ -2,13 +2,16 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
+    <!-- Single-file SDK: works on .NET Framework 4.7.2+ and .NET 6+ -->
     <TargetFramework>net8.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <AssemblyName>AegisAuth.Quickstart</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../../Aegis.Sdk/Aegis.Sdk.csproj" />
+    <!-- The entire SDK is this one file — no packages required. -->
+    <Compile Include="..\..\AegisAuth.cs" Link="AegisAuth.cs" />
   </ItemGroup>
 
 </Project>

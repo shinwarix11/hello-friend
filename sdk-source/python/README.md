@@ -1,75 +1,100 @@
-# Aegis SDK for Python
+# AegisAuth — Python SDK
 
-Official client for the Aegis Authentication API. Pure standard library —
-no third-party dependencies. Python 3.9+.
+Official Python client for the **Aegis Authentication** platform.
 
-## Contents
-
-```
-aegis/client.py   Aegis client with every API operation
-aegis/errors.py   AegisError with typed error codes
-aegis/hwid.py     Stable hardware id
-examples/         Runnable quickstart
-```
+- **Single file** — the whole SDK is [`aegis_auth.py`](aegis_auth.py).
+- **Zero dependencies** — standard library only (`urllib`, no `requests` needed).
+- **Anywhere Python runs** — CPython 3.8+ on Windows, macOS and Linux.
 
 ## Install
 
-No registry needed — unzip and install the folder directly:
+1. Download the SDK archive from your Aegis dashboard (**Developers → SDKs → Python**).
+2. Copy `aegis_auth.py` into your project.
+3. `from aegis_auth import AegisAuth` — done.
 
-```bash
-pip install ./aegis-sdk-python
-```
-
-Or drop the `aegis/` package next to your application code.
-
-## Quickstart
+## Quick start
 
 ```python
-from aegis import Aegis, AegisError
+from aegis_auth import AegisAuth
 
-client = Aegis(base_url="https://your-aegis-host", app_key=APP_KEY, version="1.0.0")
+aegis_app = AegisAuth(
+    name="My Application",           # display name of your application
+    ownerid="YOUR-APPLICATION-KEY",  # Application Key from the dashboard
+    secret="",                       # optional API key (elevated calls only)
+    version="1.0.0",                 # version of the build you ship
+)
 
-info = client.init()
-if (info.get("version") or {}).get("update_required"):
-    raise SystemExit("Update required")
+aegis_app.init()
+if not aegis_app.response.success:
+    raise SystemExit(aegis_app.response.message)
 
-result = client.login("ada", password)
-print("Signed in as", result["user"]["username"])
-
-check = client.validate_license("AEGS-4K7P-2M9X-QT31")
-print(check.get("valid"), check.get("status"))
-
-client.set_variable("last_level", "12")
-print(client.get_variables("user")["variables"])
-
-with client.start_heartbeat(interval=60, on_revoked=lambda reason: app.lock(reason)):
-    app.run()
-
-client.logout()
+aegis_app.login("ada", "correct horse battery staple")
+if aegis_app.response.success:
+    print(f"Welcome {aegis_app.user_data.username}")
 ```
 
-## Supported operations
+### Constructor parameters
 
-`init`, `status`, `app_data`, `register`, `login`, `logout`, `heartbeat`,
-`check_session`, `is_authenticated`, `use_session`, `user_data`,
-`validate_license`, `activate_license`, `get_variables`, `set_variable`,
-`check_version`, `downloads`, `trigger_webhook`, plus `request()` for any
-endpoint added later.
+| Parameter | Maps to | Notes |
+| --------- | ------- | ----- |
+| `name`    | Application name in the dashboard | Informational |
+| `ownerid` | **Application Key** (public key)  | Identifies your application; sent as `x-app-key` |
+| `secret`  | API key (dashboard → Developers → Keys) | Optional; only needed for elevated calls |
+| `version` | The build you are shipping | Checked against the minimum published version |
+| `url`     | *(optional)* API base URL | Defaults to the hosted Aegis platform |
+
+## API
+
+| Method | Purpose |
+| ------ | ------- |
+| `init()` | Handshake. Call once before any other operation. Fills `app_data`. |
+| `register(user, password, license_key=None, email=None)` | Create a user, optionally redeeming a key. |
+| `login(user, password)` | Authenticate and open a session. |
+| `license(key)` | Key-only authentication — validates and binds a key to this machine. |
+| `upgrade(user, key)` | Attach a license key to an existing account. |
+| `var(varid)` | Read an application variable published from the dashboard. |
+| `getvar(name)` / `setvar(name, value)` | Per-user variables (session required). |
+| `log(message)` | Write to the application's audit log. |
+| `check()` | Validate the active session against the server. |
+| `logout()` | Terminate the session server-side. |
+| `fetchstats()` | Refresh `app_data` (user/key counters, downloads). |
+| `update_available(channel="stable")` | True when a newer build is published. |
+| `use_session(token)` | Restore a persisted session token. |
+| `expirydaysleft()` | Days left on the active license. |
+
+Every call fills `aegis_app.response.success` and `aegis_app.response.message`.
+
+## Session & user data
+
+```python
+aegis_app.user_data.username        # signed-in user
+aegis_app.user_data.subscriptions   # active license(s) with expiry + timeleft
+aegis_app.app_data.numUsers         # total users on the application
+aegis_app.app_data.numKeys          # total license keys
+aegis_app.app_data.app_ver          # latest published version
+```
+
+Persist `aegis_app.sessionid` and restore it with `use_session(token)` + `check()`
+to skip the login screen.
+
+## Example
+
+```bash
+python examples/quickstart.py
+```
 
 ## Error handling
 
+The SDK never raises for API failures — check `response.success`:
+
 ```python
-try:
-    client.login(username, password)
-except AegisError as error:
-    if error.code == "hwid_mismatch":
-        ui.show("This license is locked to another machine.")
-    elif error.is_network_error:
-        ui.show("Aegis is unreachable — retrying.")
-    else:
-        raise
+aegis_app.login(user, password)
+if not aegis_app.response.success:
+    print("Login failed:", aegis_app.response.message)
 ```
 
-## License
+Network problems surface as `response.message = "Network error: ..."`.
 
-MIT — see `LICENSE`.
+## Versioning
+
+This SDK follows [SemVer](https://semver.org). See [CHANGELOG.md](CHANGELOG.md).

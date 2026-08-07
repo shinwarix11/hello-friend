@@ -3,15 +3,32 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "aegis-sdk"
+name = "aegis-auth"
 version = "1.0.0"
-description = "Official Aegis Authentication API SDK for Python"
+description = "Official AegisAuth SDK — single-file client for the Aegis Authentication platform."
 readme = "README.md"
-requires-python = ">=3.9"
-license = { file = "LICENSE" }
+requires-python = ">=3.8"
+license = { text = "MIT" }
 authors = [{ name = "Aegis" }]
-keywords = ["aegis", "authentication", "licensing", "sdk"]
-dependencies = []
+keywords = ["aegis", "aegisauth", "authentication", "licensing", "auth"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Security",
+    "Topic :: Software Development :: Libraries",
+]
 
+[project.urls]
+Homepage = "https://project--9347818a-431f-4584-98ac-b0d367707e9b.lovable.app"
+Documentation = "https://project--9347818a-431f-4584-98ac-b0d367707e9b.lovable.app/developers/docs"
+
+# Single-module distribution: the whole SDK is aegis_auth.py
 [tool.setuptools]
-packages = ["aegis"]
+py-modules = ["aegis_auth"]
