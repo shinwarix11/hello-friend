@@ -727,5 +727,62 @@ namespace AegisAuth
                 return null;
             }
         }
+
+        /// <summary>
+        /// Extracts a string field from a JSON document without a full parse.
+        /// Used as a fallback when the standard envelope cannot be deserialized
+        /// (e.g. "error" returned as a plain string, or a non-DCJS shape).
+        /// </summary>
+        public static string ExtractString(string json, string key)
+        {
+            if (string.IsNullOrEmpty(json)) return null;
+            var match = System.Text.RegularExpressions.Regex.Match(
+                json,
+                "\"" + System.Text.RegularExpressions.Regex.Escape(key) + "\"\\s*:\\s*\"((?:[^\"\\\\]|\\\\.)*)\"",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            return match.Success ? Unescape(match.Groups[1].Value) : null;
+        }
+
+        /// <summary>Truncates raw response text so error messages stay readable.</summary>
+        public static string Truncate(string value, int max)
+        {
+            if (string.IsNullOrEmpty(value) || value.Length <= max) return value;
+            return value.Substring(0, max) + "…";
+        }
+
+        private static string Unescape(string value)
+        {
+            var builder = new StringBuilder(value.Length);
+            for (var i = 0; i < value.Length; i++)
+            {
+                var c = value[i];
+                if (c != '\\' || i + 1 >= value.Length)
+                {
+                    builder.Append(c);
+                    continue;
+                }
+                var n = value[++i];
+                switch (n)
+                {
+                    case '"': builder.Append('"'); break;
+                    case '\\': builder.Append('\\'); break;
+                    case '/': builder.Append('/'); break;
+                    case 'b': builder.Append('\b'); break;
+                    case 'f': builder.Append('\f'); break;
+                    case 'n': builder.Append('\n'); break;
+                    case 'r': builder.Append('\r'); break;
+                    case 't': builder.Append('\t'); break;
+                    case 'u':
+                        if (i + 4 < value.Length)
+                        {
+                            builder.Append((char)Convert.ToInt32(value.Substring(i + 1, 4), 16));
+                            i += 4;
+                        }
+                        break;
+                    default: builder.Append(n); break;
+                }
+            }
+            return builder.ToString();
+        }
     }
 }
