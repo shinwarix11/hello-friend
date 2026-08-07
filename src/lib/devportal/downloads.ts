@@ -2,7 +2,7 @@
  * Download centre catalogue: SDK packages, tools, sample projects and docs.
  * Artifact metadata mirrors the published SDK releases in `sdks.ts`.
  */
-import { SDKS } from "./sdks";
+import { SDKS, sdkArchiveName, sdkChecksum, sdkDownloadUrl, sdkPackageSize } from "./sdks";
 
 export type DownloadKind = "sdk" | "cli" | "sample" | "documentation" | "tool";
 
@@ -17,9 +17,10 @@ export type DownloadArtifact = {
   platform: DownloadPlatform;
   size: string;
   checksum: string;
-  /** Command that fetches the artifact from its official registry. */
-  command: string;
-  commandLabel: string;
+  /** Direct download URL served by this platform. */
+  url: string;
+  /** File name saved by the browser. */
+  fileName: string;
 };
 
 export const DOWNLOAD_KIND_LABEL: Record<DownloadKind, string> = {
@@ -63,10 +64,10 @@ const sdkDownloads: DownloadArtifact[] = SDKS.map((sdk) => ({
   description: sdk.tagline,
   version: sdk.latest,
   platform: "any",
-  size: sdk.size,
-  checksum: checksumFor(`${sdk.id}@${sdk.latest}`),
-  command: sdk.install,
-  commandLabel: sdk.installLanguage,
+  size: sdkPackageSize(sdk),
+  checksum: sdkChecksum(sdk),
+  url: sdkDownloadUrl(sdk),
+  fileName: sdkArchiveName(sdk),
 }));
 
 const tooling: DownloadArtifact[] = [

@@ -21,7 +21,7 @@ import { useApplications } from "@/hooks/useApplications";
 import { useDeveloperUsage, useDeveloperPreferences } from "@/hooks/useDeveloper";
 import { CHANGELOG, CHANGE_KIND_LABEL } from "@/lib/devportal/changelog";
 import { API_BASE_PATH, API_ENDPOINT_SPECS } from "@/lib/devportal/api-spec";
-import { SDKS } from "@/lib/devportal/sdks";
+import { SDKS, sdkArchiveName, sdkDownloadUrl, sdkPackageSize } from "@/lib/devportal/sdks";
 
 export const Route = createFileRoute("/_authenticated/developers/")({
   component: DeveloperDashboard,

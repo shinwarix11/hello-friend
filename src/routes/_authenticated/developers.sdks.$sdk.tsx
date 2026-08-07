@@ -4,7 +4,16 @@ import { ArrowLeft } from "lucide-react";
 import { CodeBlock } from "@/components/devportal/CodeBlock";
 import { DocSection, KeyValue, Prose } from "@/components/devportal/parts";
 import { Badge } from "@/components/ui/badge";
-import { SDKS, SDK_STATUS_LABEL, findSdk } from "@/lib/devportal/sdks";
+import {
+  SDKS,
+  SDK_STATUS_LABEL,
+  findSdk,
+  sdkArchiveName,
+  sdkChecksum,
+  sdkDownloadUrl,
+  sdkFileCount,
+  sdkPackageSize,
+} from "@/lib/devportal/sdks";
 
 export const Route = createFileRoute("/_authenticated/developers/sdks/$sdk")({
   beforeLoad: ({ params }) => {
@@ -57,13 +66,24 @@ function SdkDetail() {
           </div>
           <Prose>{sdk.tagline}</Prose>
           <div className="mt-4 grid gap-4 md:grid-cols-2">
-            <CodeBlock code={sdk.install} language={sdk.installLanguage} filename="install" />
+            <div className="space-y-3">
+              <CodeBlock code={sdk.setup} language={sdk.setupLanguage} filename="setup" />
+              <a
+                href={sdkDownloadUrl(sdk)}
+                download={sdkArchiveName(sdk)}
+                className="inline-flex items-center justify-center rounded-lg border border-primary/40 bg-primary/10 px-3 py-2 text-xs text-foreground transition-colors hover:bg-primary/20"
+              >
+                Download {sdkArchiveName(sdk)} ({sdkPackageSize(sdk)})
+              </a>
+            </div>
             <div>
               <KeyValue label="Package" value={sdk.package} />
               <KeyValue label="Language" value={sdk.language} />
               <KeyValue label="Runtime" value={sdk.minimumRuntime} />
               <KeyValue label="Platforms" value={sdk.platforms.join(", ")} />
-              <KeyValue label="Package size" value={sdk.size} />
+              <KeyValue label="Package size" value={sdkPackageSize(sdk)} />
+              <KeyValue label="Files" value={String(sdkFileCount(sdk))} />
+              <KeyValue label="Checksum" value={sdkChecksum(sdk)} />
             </div>
           </div>
         </div>
