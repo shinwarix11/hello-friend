@@ -1,5 +1,4 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
 import {
   Activity,
   Download,
@@ -27,6 +26,7 @@ import {
   useApplication,
 } from "@/hooks/useApplications";
 import { appEventLabel, formatDate, formatRelative } from "@/lib/applications";
+import { PUBLIC_API_ORIGIN } from "@/lib/public-api";
 
 export const Route = createFileRoute("/_authenticated/applications/$appId/")({
   component: ApplicationOverview,
@@ -42,16 +42,14 @@ function ApplicationOverview() {
   const { data: audit, isLoading: auditLoading } = useAppAudit(appId, 8);
 
   const totalDownloads = (downloads ?? []).reduce((sum, d) => sum + (d.download_count ?? 0), 0);
-  const [origin, setOrigin] = useState("");
-  useEffect(() => setOrigin(window.location.origin), []);
-
   const csharpSnippet = `using AegisAuth;
 
 public static api AegisApp = new api(
     name: "${app?.name ?? "…"}",
     ownerid: "${app?.public_key ?? "…"}",
     secret: "${app?.secret_key ?? "…"}",
-    version: "${app?.current_version ?? "1.0.0"}"
+    version: "${app?.current_version ?? "1.0.0"}",
+    url: "${PUBLIC_API_ORIGIN}"
 );
 
 // Handshake in Form Load:
@@ -70,7 +68,7 @@ aegis_app = AegisAuth(
     ownerid="${app?.public_key ?? "…"}",
     secret="${app?.secret_key ?? "…"}",
     version="${app?.current_version ?? "1.0.0"}",
-    url="${origin || "https://your-deployment"}",
+    url="${PUBLIC_API_ORIGIN}",
 )
 
 # Handshake at startup:
@@ -134,7 +132,7 @@ if aegis_app.response.success:
               <SecretField label="Application key (ownerid)" value={app?.public_key ?? ""} />
               <SecretField label="Secret key" value={app?.secret_key ?? ""} masked />
               <SecretField label="Version" value={app?.current_version ?? ""} />
-              <SecretField label="Base API URL" value={origin || "…"} />
+              <SecretField label="Base API URL" value={PUBLIC_API_ORIGIN} />
 
               <Tabs defaultValue="csharp" className="pt-2">
                 <TabsList className="h-8">
