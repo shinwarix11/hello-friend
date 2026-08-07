@@ -22,14 +22,14 @@ export const SDK_ARCHIVES: Record<string, SdkArchiveInfo> = {
     "sha256": "dbff5a4d5cd890421595cb4be64f0d58a69cade13acf30fe7af104a9201bf772"
   },
   "cpp": {
-    "files": 8,
-    "bytes": 26450,
-    "sha256": "ec84bf04f71642ece937ba2b99d19ce3eb83594672d3ece77f339bae2d6077b3"
+    "files": 7,
+    "bytes": 29918,
+    "sha256": "d4357fa479815da2b3fda89ae2317e0847ad9559f397075b0034dbaab9d489e2"
   },
   "csharp": {
-    "files": 11,
-    "bytes": 28157,
-    "sha256": "d23b8ccbebc1598727bbfe622697d917cd14ad744d8ba95f5c8447ae7930154d"
+    "files": 6,
+    "bytes": 45271,
+    "sha256": "3b1ac679c9c65559b08ec9c00c9f56676c5b89d453b85ed6cc923d9153923041"
   },
   "dart": {
     "files": 11,
@@ -72,9 +72,9 @@ export const SDK_ARCHIVES: Record<string, SdkArchiveInfo> = {
     "sha256": "70410b7f6953fb7ded475f8c7a4d4fdf8a2964ba203c6b1ea6a5dbff5d8127a7"
   },
   "python": {
-    "files": 9,
-    "bytes": 16575,
-    "sha256": "c3a41ab63a209637aa1b41ec29362a3c0fe796c123e7d44a5e151bf3fbac97c7"
+    "files": 8,
+    "bytes": 50537,
+    "sha256": "e2add755ec77a4aad9cf5c740c87aa6372f88bc08a48eeccd1b6a80535c4e764"
   },
   "rust": {
     "files": 9,
