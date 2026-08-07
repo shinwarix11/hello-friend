@@ -120,7 +120,14 @@ function DeveloperDashboard() {
           <div className="surface-card space-y-3 rounded-2xl p-4">
             <h3 className="text-sm font-medium">Recommended SDK</h3>
             <p className="text-xs text-muted-foreground">{recommendedSdk.tagline}</p>
-            <CodeBlock code={recommendedSdk.install} language={recommendedSdk.installLanguage} filename="install" />
+            <CodeBlock code={recommendedSdk.setup} language={recommendedSdk.setupLanguage} filename="setup" />
+            <a
+              href={sdkDownloadUrl(recommendedSdk)}
+              download={sdkArchiveName(recommendedSdk)}
+              className="inline-block text-xs text-primary hover:underline"
+            >
+              Download the {recommendedSdk.name} SDK ({sdkPackageSize(recommendedSdk)})
+            </a>
             <Link
               to="/developers/sdks/$sdk"
               params={{ sdk: recommendedSdk.id }}
