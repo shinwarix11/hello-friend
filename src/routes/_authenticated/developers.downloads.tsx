@@ -1,7 +1,6 @@
 import { useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 
-import { CodeBlock } from "@/components/devportal/CodeBlock";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import {
