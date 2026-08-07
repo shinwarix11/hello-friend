@@ -1,9 +1,11 @@
 /**
  * Official SDK catalogue.
  *
- * Each entry documents how the language talks to the real Aegis HTTP API, so
- * the pages stay accurate even before the packaged SDK binary ships.
+ * Every entry maps to a real, complete SDK project in `sdk-source/`, packaged
+ * on demand by `GET /api/public/sdk/:id`. There are no package-registry
+ * installs: the platform hosts and serves each SDK itself.
  */
+import { SDK_ARCHIVES, formatBytes } from "./sdk-manifest";
 
 export type SdkStatus = "stable" | "beta" | "planned";
 
@@ -17,16 +19,46 @@ export type Sdk = {
   tagline: string;
   status: SdkStatus;
   language: string;
+  /** Project/module name used inside the SDK itself. */
   package: string;
-  install: string;
-  installLanguage: string;
+  /** Folder inside `sdk-source/` that is packaged for download. */
+  dir: string;
+  /** How the SDK is added to a project once the archive is unzipped. */
+  setup: string;
+  setupLanguage: string;
   platforms: string[];
   minimumRuntime: string;
   latest: string;
-  size: string;
   sections: SdkSection[];
   releases: SdkRelease[];
 };
+
+/** Public download URL for an SDK archive. */
+export function sdkDownloadUrl(sdk: Pick<Sdk, "id">): string {
+  return `/api/public/sdk/${sdk.id}`;
+}
+
+/** File name the browser saves the archive as. */
+export function sdkArchiveName(sdk: Pick<Sdk, "id" | "latest">): string {
+  return `aegis-sdk-${sdk.id}-${sdk.latest}.zip`;
+}
+
+/** Human-readable package size, measured from the real source tree. */
+export function sdkPackageSize(sdk: Pick<Sdk, "dir">): string {
+  const archive = SDK_ARCHIVES[sdk.dir];
+  return archive ? formatBytes(archive.bytes) : "—";
+}
+
+/** Number of files shipped in the SDK project. */
+export function sdkFileCount(sdk: Pick<Sdk, "dir">): number {
+  return SDK_ARCHIVES[sdk.dir]?.files ?? 0;
+}
+
+/** SHA-256 digest of the SDK source tree. */
+export function sdkChecksum(sdk: Pick<Sdk, "dir">): string {
+  const archive = SDK_ARCHIVES[sdk.dir];
+  return archive ? `sha256:${archive.sha256}` : "—";
+}
 
 const jsFlow = (lang: string) => [
   {
