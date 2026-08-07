@@ -137,6 +137,12 @@ class Aegis
         return $this->request('version/check', ['version' => $version ?? $this->version, 'channel' => $this->channel]);
     }
 
+    /** Download information published for this application. */
+    public function downloads(): array
+    {
+        return $this->request('downloads');
+    }
+
     // ---------------- authentication ----------------
 
     public function register(string $username, string $password, ?string $email = null, ?string $licenseKey = null): array

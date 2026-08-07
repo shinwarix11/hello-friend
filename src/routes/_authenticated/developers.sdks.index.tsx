@@ -5,7 +5,7 @@ import { Search } from "lucide-react";
 import { CodeBlock } from "@/components/devportal/CodeBlock";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { SDKS, SDK_STATUS_LABEL } from "@/lib/devportal/sdks";
+import { SDKS, SDK_STATUS_LABEL, sdkArchiveName, sdkDownloadUrl, sdkPackageSize } from "@/lib/devportal/sdks";
 
 export const Route = createFileRoute("/_authenticated/developers/sdks/")({
   component: SdkCatalogue,
@@ -66,12 +66,20 @@ function SdkCatalogue() {
               </Badge>
             </div>
             <div className="mt-3">
-              <CodeBlock code={sdk.install} language={sdk.installLanguage} filename={sdk.package} />
+              <CodeBlock code={sdk.setup} language={sdk.setupLanguage} filename={sdk.package} />
             </div>
+            <a
+              href={sdkDownloadUrl(sdk)}
+              download={sdkArchiveName(sdk)}
+              onClick={(event) => event.stopPropagation()}
+              className="mt-3 inline-flex items-center justify-center rounded-lg border border-primary/40 bg-primary/10 px-3 py-1.5 text-xs text-foreground transition-colors hover:bg-primary/20"
+            >
+              Download SDK
+            </a>
             <div className="mt-3 flex flex-wrap items-center gap-2 text-[10.5px] text-muted-foreground">
               <span>v{sdk.latest}</span>
               <span>·</span>
-              <span>{sdk.size}</span>
+              <span>{sdkPackageSize(sdk)}</span>
               <span>·</span>
               <span>{sdk.minimumRuntime}</span>
             </div>

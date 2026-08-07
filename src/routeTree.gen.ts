@@ -46,6 +46,7 @@ import { Route as AuthenticatedDevelopersDocsIndexRouteImport } from './routes/_
 import { Route as AuthenticatedDevelopersDocsGroupRouteImport } from './routes/_authenticated/developers.docs.$group'
 import { Route as AuthenticatedDevelopersSdksIndexRouteImport } from './routes/_authenticated/developers.sdks.index'
 import { Route as AuthenticatedDevelopersSdksSdkRouteImport } from './routes/_authenticated/developers.sdks.$sdk'
+import { Route as ApiPublicSdkIdRouteImport } from './routes/api/public/sdk.$id'
 import { Route as ApiPublicV1SplatRouteImport } from './routes/api/public/v1/$'
 
 const IndexRoute = IndexRouteImport.update({
@@ -258,6 +259,11 @@ const AuthenticatedDevelopersSdksSdkRoute =
     path: '/sdks/$sdk',
     getParentRoute: () => AuthenticatedDevelopersRoute,
   } as any)
+const ApiPublicSdkIdRoute = ApiPublicSdkIdRouteImport.update({
+  id: '/api/public/sdk/$id',
+  path: '/api/public/sdk/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicV1SplatRoute = ApiPublicV1SplatRouteImport.update({
   id: '/api/public/v1/$',
   path: '/api/public/v1/$',
@@ -298,6 +304,7 @@ export interface FileRoutesByFullPath {
   '/applications/$appId/webhooks': typeof AuthenticatedApplicationsAppIdWebhooksRoute
   '/developers/docs/$group': typeof AuthenticatedDevelopersDocsGroupRoute
   '/developers/sdks/$sdk': typeof AuthenticatedDevelopersSdksSdkRoute
+  '/api/public/sdk/$id': typeof ApiPublicSdkIdRoute
   '/api/public/v1/$': typeof ApiPublicV1SplatRoute
   '/applications/$appId/': typeof AuthenticatedApplicationsAppIdIndexRoute
   '/developers/docs/': typeof AuthenticatedDevelopersDocsIndexRoute
@@ -335,6 +342,7 @@ export interface FileRoutesByTo {
   '/applications/$appId/webhooks': typeof AuthenticatedApplicationsAppIdWebhooksRoute
   '/developers/docs/$group': typeof AuthenticatedDevelopersDocsGroupRoute
   '/developers/sdks/$sdk': typeof AuthenticatedDevelopersSdksSdkRoute
+  '/api/public/sdk/$id': typeof ApiPublicSdkIdRoute
   '/api/public/v1/$': typeof ApiPublicV1SplatRoute
   '/applications/$appId': typeof AuthenticatedApplicationsAppIdIndexRoute
   '/developers/docs': typeof AuthenticatedDevelopersDocsIndexRoute
@@ -376,6 +384,7 @@ export interface FileRoutesById {
   '/_authenticated/applications/$appId/webhooks': typeof AuthenticatedApplicationsAppIdWebhooksRoute
   '/_authenticated/developers/docs/$group': typeof AuthenticatedDevelopersDocsGroupRoute
   '/_authenticated/developers/sdks/$sdk': typeof AuthenticatedDevelopersSdksSdkRoute
+  '/api/public/sdk/$id': typeof ApiPublicSdkIdRoute
   '/api/public/v1/$': typeof ApiPublicV1SplatRoute
   '/_authenticated/applications/$appId/': typeof AuthenticatedApplicationsAppIdIndexRoute
   '/_authenticated/developers/docs/': typeof AuthenticatedDevelopersDocsIndexRoute
@@ -417,6 +426,7 @@ export interface FileRouteTypes {
     | '/applications/$appId/webhooks'
     | '/developers/docs/$group'
     | '/developers/sdks/$sdk'
+    | '/api/public/sdk/$id'
     | '/api/public/v1/$'
     | '/applications/$appId/'
     | '/developers/docs/'
@@ -454,6 +464,7 @@ export interface FileRouteTypes {
     | '/applications/$appId/webhooks'
     | '/developers/docs/$group'
     | '/developers/sdks/$sdk'
+    | '/api/public/sdk/$id'
     | '/api/public/v1/$'
     | '/applications/$appId'
     | '/developers/docs'
@@ -494,6 +505,7 @@ export interface FileRouteTypes {
     | '/_authenticated/applications/$appId/webhooks'
     | '/_authenticated/developers/docs/$group'
     | '/_authenticated/developers/sdks/$sdk'
+    | '/api/public/sdk/$id'
     | '/api/public/v1/$'
     | '/_authenticated/applications/$appId/'
     | '/_authenticated/developers/docs/'
@@ -505,6 +517,7 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  ApiPublicSdkIdRoute: typeof ApiPublicSdkIdRoute
   ApiPublicV1SplatRoute: typeof ApiPublicV1SplatRoute
 }
 
@@ -769,6 +782,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDevelopersSdksSdkRouteImport
       parentRoute: typeof AuthenticatedDevelopersRoute
     }
+    '/api/public/sdk/$id': {
+      id: '/api/public/sdk/$id'
+      path: '/api/public/sdk/$id'
+      fullPath: '/api/public/sdk/$id'
+      preLoaderRoute: typeof ApiPublicSdkIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/v1/$': {
       id: '/api/public/v1/$'
       path: '/api/public/v1/$'
@@ -901,18 +921,9 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  ApiPublicSdkIdRoute: ApiPublicSdkIdRoute,
   ApiPublicV1SplatRoute: ApiPublicV1SplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

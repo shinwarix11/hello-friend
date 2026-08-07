@@ -1,9 +1,11 @@
 /**
  * Official SDK catalogue.
  *
- * Each entry documents how the language talks to the real Aegis HTTP API, so
- * the pages stay accurate even before the packaged SDK binary ships.
+ * Every entry maps to a real, complete SDK project in `sdk-source/`, packaged
+ * on demand by `GET /api/public/sdk/:id`. There are no package-registry
+ * installs: the platform hosts and serves each SDK itself.
  */
+import { SDK_ARCHIVES, formatBytes } from "./sdk-manifest";
 
 export type SdkStatus = "stable" | "beta" | "planned";
 
@@ -17,16 +19,46 @@ export type Sdk = {
   tagline: string;
   status: SdkStatus;
   language: string;
+  /** Project/module name used inside the SDK itself. */
   package: string;
-  install: string;
-  installLanguage: string;
+  /** Folder inside `sdk-source/` that is packaged for download. */
+  dir: string;
+  /** How the SDK is added to a project once the archive is unzipped. */
+  setup: string;
+  setupLanguage: string;
   platforms: string[];
   minimumRuntime: string;
   latest: string;
-  size: string;
   sections: SdkSection[];
   releases: SdkRelease[];
 };
+
+/** Public download URL for an SDK archive. */
+export function sdkDownloadUrl(sdk: Pick<Sdk, "id">): string {
+  return `/api/public/sdk/${sdk.id}`;
+}
+
+/** File name the browser saves the archive as. */
+export function sdkArchiveName(sdk: Pick<Sdk, "id" | "latest">): string {
+  return `aegis-sdk-${sdk.id}-${sdk.latest}.zip`;
+}
+
+/** Human-readable package size, measured from the real source tree. */
+export function sdkPackageSize(sdk: Pick<Sdk, "dir">): string {
+  const archive = SDK_ARCHIVES[sdk.dir];
+  return archive ? formatBytes(archive.bytes) : "—";
+}
+
+/** Number of files shipped in the SDK project. */
+export function sdkFileCount(sdk: Pick<Sdk, "dir">): number {
+  return SDK_ARCHIVES[sdk.dir]?.files ?? 0;
+}
+
+/** SHA-256 digest of the SDK source tree. */
+export function sdkChecksum(sdk: Pick<Sdk, "dir">): string {
+  const archive = SDK_ARCHIVES[sdk.dir];
+  return archive ? `sha256:${archive.sha256}` : "—";
+}
 
 const jsFlow = (lang: string) => [
   {
@@ -116,12 +148,12 @@ export const SDKS: Sdk[] = [
     status: "stable",
     language: "csharp",
     package: "Aegis.Sdk",
-    install: "dotnet add package Aegis.Sdk",
-    installLanguage: "shell",
+    dir: "csharp",
+    setup: "dotnet add reference path/to/aegis-sdk-csharp/src/Aegis.Sdk.csproj",
+    setupLanguage: "shell",
     platforms: ["Windows", "Linux", "macOS", "Unity"],
     minimumRuntime: ".NET 6.0",
     latest: "1.4.0",
-    size: "184 KB",
     releases: [
       { version: "1.4.0", date: "2026-07-28", notes: "Async heartbeat host, cancellation token support." },
       { version: "1.3.1", date: "2026-06-14", notes: "Stable HWID provider on virtualised machines." },
@@ -200,12 +232,12 @@ catch (AegisException ex) when (ex.Code == "license_expired")
     status: "beta",
     language: "cpp",
     package: "aegis-cpp",
-    install: "vcpkg install aegis-cpp",
-    installLanguage: "shell",
+    dir: "cpp",
+    setup: "cmake --build . # add_subdirectory(aegis-sdk-cpp)",
+    setupLanguage: "shell",
     platforms: ["Windows", "Linux", "macOS"],
     minimumRuntime: "C++17",
     latest: "0.9.2",
-    size: "96 KB",
     releases: [
       { version: "0.9.2", date: "2026-07-11", notes: "CMake package config, static linking on MSVC." },
       { version: "0.9.0", date: "2026-05-20", notes: "First public beta." },
@@ -280,12 +312,12 @@ client.auth().logout();`,
     status: "stable",
     language: "python",
     package: "aegis-sdk",
-    install: "pip install aegis-sdk",
-    installLanguage: "shell",
+    dir: "python",
+    setup: "pip install ./aegis-sdk-python",
+    setupLanguage: "shell",
     platforms: ["CPython 3.9+", "PyPy"],
     minimumRuntime: "Python 3.9",
     latest: "1.2.3",
-    size: "62 KB",
     releases: [
       { version: "1.2.3", date: "2026-07-19", notes: "AsyncAegis client, httpx transport." },
       { version: "1.2.0", date: "2026-06-02", notes: "Typed dataclass responses." },
@@ -358,12 +390,12 @@ except AegisError as error:
     status: "stable",
     language: "javascript",
     package: "@aegis/sdk",
-    install: "npm install @aegis/sdk",
-    installLanguage: "shell",
+    dir: "javascript",
+    setup: "import { Aegis } from './vendor/aegis-javascript/src/aegis.js';",
+    setupLanguage: "javascript",
     platforms: ["Node 18+", "Electron", "Browsers"],
     minimumRuntime: "Node 18",
     latest: "2.1.0",
-    size: "18 KB gzipped",
     releases: [
       { version: "2.1.0", date: "2026-07-30", notes: "Streaming heartbeat, zero dependencies." },
       { version: "2.0.0", date: "2026-05-08", notes: "ESM only, native fetch." },
@@ -377,12 +409,12 @@ except AegisError as error:
     status: "stable",
     language: "typescript",
     package: "@aegis/sdk",
-    install: "npm install @aegis/sdk",
-    installLanguage: "shell",
+    dir: "typescript",
+    setup: "npm install ./aegis-sdk-typescript",
+    setupLanguage: "shell",
     platforms: ["Node 18+", "Electron", "Browsers", "Workers"],
     minimumRuntime: "TypeScript 5.0",
     latest: "2.1.0",
-    size: "18 KB gzipped",
     releases: [
       { version: "2.1.0", date: "2026-07-30", notes: "Discriminated union error types." },
       { version: "2.0.0", date: "2026-05-08", notes: "Strict mode, exactOptionalPropertyTypes safe." },
@@ -396,12 +428,12 @@ except AegisError as error:
     status: "beta",
     language: "rust",
     package: "aegis-sdk",
-    install: `cargo add aegis-sdk`,
-    installLanguage: "shell",
+    dir: "rust",
+    setup: "aegis = { path = \"vendor/aegis-sdk-rust\" }",
+    setupLanguage: "toml",
     platforms: ["Windows", "Linux", "macOS"],
     minimumRuntime: "Rust 1.75",
     latest: "0.8.1",
-    size: "212 KB",
     releases: [
       { version: "0.8.1", date: "2026-07-05", notes: "rustls by default, no OpenSSL requirement." },
       { version: "0.8.0", date: "2026-04-22", notes: "First beta with full endpoint coverage." },
@@ -475,12 +507,12 @@ client.auth().logout().await?;`,
     status: "beta",
     language: "go",
     package: "github.com/aegis-dev/aegis-go",
-    install: "go get github.com/aegis-dev/aegis-go",
-    installLanguage: "shell",
+    dir: "go",
+    setup: "replace github.com/aegis-dev/aegis-go => ./aegis-sdk-go",
+    setupLanguage: "shell",
     platforms: ["Windows", "Linux", "macOS"],
     minimumRuntime: "Go 1.21",
     latest: "0.7.4",
-    size: "1.2 MB (static)",
     releases: [
       { version: "0.7.4", date: "2026-07-16", notes: "Context deadlines on every call." },
       { version: "0.7.0", date: "2026-04-30", notes: "First beta release." },
@@ -558,12 +590,12 @@ if errors.As(err, &apiErr) && apiErr.Code == "license_exhausted" {
     status: "beta",
     language: "java",
     package: "dev.aegis:aegis-sdk",
-    install: `implementation("dev.aegis:aegis-sdk:0.6.2")`,
-    installLanguage: "kotlin",
+    dir: "java",
+    setup: "javac -d out $(find aegis-sdk-java/src -name \"*.java\")",
+    setupLanguage: "shell",
     platforms: ["JVM 17+", "Android"],
     minimumRuntime: "Java 17",
     latest: "0.6.2",
-    size: "148 KB",
     releases: [
       { version: "0.6.2", date: "2026-07-09", notes: "Java 21 virtual thread friendly HTTP client." },
       { version: "0.6.0", date: "2026-05-15", notes: "First beta." },
@@ -635,12 +667,12 @@ aegis.auth().logout();`,
     status: "planned",
     language: "php",
     package: "aegis/sdk",
-    install: "composer require aegis/sdk",
-    installLanguage: "shell",
+    dir: "php",
+    setup: "composer config repositories.aegis path ./aegis-sdk-php && composer require aegis/sdk:@dev",
+    setupLanguage: "shell",
     platforms: ["PHP 8.1+", "Laravel", "Symfony"],
     minimumRuntime: "PHP 8.1",
     latest: "0.4.0",
-    size: "54 KB",
     releases: [{ version: "0.4.0", date: "2026-06-25", notes: "Preview release: authentication and licensing." }],
     sections: [
       {
@@ -712,12 +744,12 @@ if (!$check->valid) {
     status: "planned",
     language: "lua",
     package: "aegis",
-    install: "luarocks install aegis",
-    installLanguage: "shell",
+    dir: "lua",
+    setup: "package.path = 'aegis-sdk-lua/src/?.lua;aegis-sdk-lua/src/?/init.lua;' .. package.path",
+    setupLanguage: "lua",
     platforms: ["Lua 5.4", "LuaJIT"],
     minimumRuntime: "Lua 5.4",
     latest: "0.3.0",
-    size: "22 KB",
     releases: [{ version: "0.3.0", date: "2026-06-18", notes: "Preview release: init, login and license validation." }],
     sections: [
       {
