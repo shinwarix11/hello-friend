@@ -90,7 +90,13 @@ function DownloadsPage() {
                 {DOWNLOAD_KIND_LABEL[artifact.kind]}
               </Badge>
             </div>
-            <CodeBlock code={artifact.command} language="shell" filename={artifact.commandLabel} />
+            <a
+              href={artifact.url}
+              download={artifact.fileName}
+              className="inline-flex items-center justify-center rounded-lg border border-primary/40 bg-primary/10 px-3 py-2 text-xs text-foreground transition-colors hover:bg-primary/20"
+            >
+              Download {artifact.fileName}
+            </a>
             <div className="space-y-1 text-[10.5px] text-muted-foreground">
               <div className="flex flex-wrap items-center gap-2">
                 <span>v{artifact.version}</span>

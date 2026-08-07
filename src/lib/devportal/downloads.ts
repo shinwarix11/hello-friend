@@ -38,25 +38,6 @@ export const DOWNLOAD_PLATFORM_LABEL: Record<DownloadPlatform, string> = {
   any: "Cross-platform",
 };
 
-/** Deterministic display checksum derived from the artifact identity. */
-function checksumFor(seed: string) {
-  let h1 = 0x811c9dc5;
-  let h2 = 0x1000193;
-  for (let i = 0; i < seed.length; i += 1) {
-    h1 = Math.imul(h1 ^ seed.charCodeAt(i), 16777619) >>> 0;
-    h2 = Math.imul(h2 + seed.charCodeAt(i) * (i + 7), 2246822519) >>> 0;
-  }
-  let out = "";
-  let a = h1;
-  let b = h2;
-  while (out.length < 64) {
-    a = Math.imul(a ^ (a >>> 15), 2246822507) >>> 0;
-    b = Math.imul(b ^ (b >>> 13), 3266489909) >>> 0;
-    out += (a ^ b).toString(16).padStart(8, "0");
-  }
-  return `sha256:${out.slice(0, 64)}`;
-}
-
 const sdkDownloads: DownloadArtifact[] = SDKS.map((sdk) => ({
   id: `sdk-${sdk.id}`,
   name: `Aegis SDK for ${sdk.name}`,
