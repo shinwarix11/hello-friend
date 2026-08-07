@@ -40,15 +40,20 @@ export class ApiError extends Error {
   }
 }
 
+const CORS_HEADERS: Record<string, string> = {
+  "access-control-allow-origin": "*",
+  "access-control-allow-headers":
+    "content-type, authorization, user-agent, x-app-key, x-app-name, x-api-key, x-session-token, x-timestamp, x-nonce, x-signature",
+  "access-control-allow-methods": "POST, GET, OPTIONS",
+  "access-control-max-age": "86400",
+};
+
 function json(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), {
     status,
     headers: {
       "content-type": "application/json; charset=utf-8",
-      "access-control-allow-origin": "*",
-      "access-control-allow-headers":
-        "content-type, x-app-key, x-api-key, x-session-token, x-timestamp, x-nonce, x-signature",
-      "access-control-allow-methods": "POST, GET, OPTIONS",
+      ...CORS_HEADERS,
       "cache-control": "no-store",
     },
   });
