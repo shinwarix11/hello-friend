@@ -20,6 +20,7 @@ import { useApplication, useMyAppRole } from "@/hooks/useApplications";
 import { useApiKeys, useCreateApiKey, useRevokeApiKey } from "@/hooks/useLicenses";
 import { atLeast, formatDate, formatRelative } from "@/lib/applications";
 import { API_SCOPES } from "@/lib/licensing";
+import { PUBLIC_API_BASE_URL } from "@/lib/public-api";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/applications/$appId/api")({
@@ -40,8 +41,7 @@ function ApiPage() {
   const [scopes, setScopes] = useState<string[]>([...API_SCOPES]);
   const [issued, setIssued] = useState<string | null>(null);
 
-  const base =
-    typeof window !== "undefined" ? `${window.location.origin}/api/public/v1` : "/api/public/v1";
+  const base = PUBLIC_API_BASE_URL;
 
   const example = `curl -X POST ${base}/login \\
   -H "content-type: application/json" \\
