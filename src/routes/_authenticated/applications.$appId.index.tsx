@@ -70,7 +70,7 @@ aegis_app = AegisAuth(
     ownerid="${app?.public_key ?? "…"}",
     secret="${app?.secret_key ?? "…"}",
     version="${app?.current_version ?? "1.0.0"}",
-    base_url="${origin || "https://your-deployment"}",
+    url="${origin || "https://your-deployment"}",
 )
 
 # Handshake at startup:
