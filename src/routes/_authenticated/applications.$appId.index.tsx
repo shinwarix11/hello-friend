@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import {
   Activity,
   Download,
@@ -15,6 +16,8 @@ import {
   StatCard,
 } from "@/components/app/applications/parts";
 import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { CodeBlock } from "@/components/devportal/CodeBlock";
 import {
   useAppAudit,
   useAppDownloads,
@@ -39,6 +42,45 @@ function ApplicationOverview() {
   const { data: audit, isLoading: auditLoading } = useAppAudit(appId, 8);
 
   const totalDownloads = (downloads ?? []).reduce((sum, d) => sum + (d.download_count ?? 0), 0);
+  const [origin, setOrigin] = useState("");
+  useEffect(() => setOrigin(window.location.origin), []);
+
+  const csharpSnippet = `using AegisAuth;
+
+public static api AegisApp = new api(
+    name: "${app?.name ?? "…"}",
+    ownerid: "${app?.public_key ?? "…"}",
+    secret: "${app?.secret_key ?? "…"}",
+    version: "${app?.current_version ?? "1.0.0"}"
+);
+
+// Handshake in Form Load:
+AegisApp.init();
+
+// License Check:
+AegisApp.license("USER-LICENSE-KEY");
+if (AegisApp.response.success) {
+    // Access Granted
+}`;
+
+  const pythonSnippet = `from aegis_auth import AegisAuth
+
+aegis_app = AegisAuth(
+    name="${app?.name ?? "…"}",
+    ownerid="${app?.public_key ?? "…"}",
+    secret="${app?.secret_key ?? "…"}",
+    version="${app?.current_version ?? "1.0.0"}",
+    base_url="${origin || "https://your-deployment"}",
+)
+
+# Handshake at startup:
+aegis_app.init()
+
+# License check:
+aegis_app.license("USER-LICENSE-KEY")
+if aegis_app.response.success:
+    # Access granted
+    pass`;
 
   return (
     <div className="space-y-6">
@@ -83,11 +125,29 @@ function ApplicationOverview() {
         </SectionCard>
 
         <div className="space-y-6">
-          <SectionCard title="Integration" description="Use these identifiers in your SDK.">
+          <SectionCard
+            title="Integration"
+            description="Drop these credentials into the AegisAuth SDK."
+          >
             <div className="space-y-3">
-              <SecretField label="Application ID" value={app?.id ?? ""} />
-              <SecretField label="Internal name" value={app?.internal_name ?? ""} />
-              <SecretField label="SDK snippet" value={`aegis.init("${app?.id ?? ""}")`} />
+              <SecretField label="Application name" value={app?.name ?? ""} />
+              <SecretField label="Application key (ownerid)" value={app?.public_key ?? ""} />
+              <SecretField label="Secret key" value={app?.secret_key ?? ""} masked />
+              <SecretField label="Version" value={app?.current_version ?? ""} />
+              <SecretField label="Base API URL" value={origin || "…"} />
+
+              <Tabs defaultValue="csharp" className="pt-2">
+                <TabsList className="h-8">
+                  <TabsTrigger value="csharp" className="px-3 text-xs">C#</TabsTrigger>
+                  <TabsTrigger value="python" className="px-3 text-xs">Python</TabsTrigger>
+                </TabsList>
+                <TabsContent value="csharp" className="mt-3">
+                  <CodeBlock code={csharpSnippet} language="csharp" filename="Program.cs" />
+                </TabsContent>
+                <TabsContent value="python" className="mt-3">
+                  <CodeBlock code={pythonSnippet} language="python" filename="main.py" />
+                </TabsContent>
+              </Tabs>
             </div>
           </SectionCard>
 
