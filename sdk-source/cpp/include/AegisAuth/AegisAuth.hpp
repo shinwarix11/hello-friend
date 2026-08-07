@@ -26,7 +26,9 @@ namespace AegisAuth {
 
 /** Default platform endpoint. Pass a custom url to the constructor for self-hosted deployments. */
 constexpr const char* kDefaultBaseUrl =
-    "https://project--9347818a-431f-4584-98ac-b0d367707e9b.lovable.app";
+    // Stable preview URL serving the latest backend build. Swap to the
+    // production URL (drop the "-dev") once the site is published.
+    "https://project--9347818a-431f-4584-98ac-b0d367707e9b-dev.lovable.app";
 
 /**
  * AegisAuth client. Create one instance per application and keep it alive
