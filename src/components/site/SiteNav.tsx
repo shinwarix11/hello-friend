@@ -101,7 +101,10 @@ export function SiteNav() {
                 </a>
               ))}
               <Button asChild className="mt-2 bg-[image:var(--gradient-brand)] text-primary-foreground">
-                <Link to={session ? "/dashboard" : "/auth"} search={session ? undefined : { mode: "signup", redirect: undefined }}>
+                <Link
+                  to={session ? "/dashboard" : "/auth"}
+                  search={session ? {} : { mode: "signup", redirect: undefined }}
+                >
                   {session ? "Open dashboard" : "Get started free"}
                 </Link>
               </Button>
