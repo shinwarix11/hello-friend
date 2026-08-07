@@ -241,7 +241,8 @@ async function findLicense(ctx: Ctx, key: string) {
     .eq("application_id", ctx.app.id)
     .eq("license_key", key)
     .maybeSingle();
-  if (!data) throw new ApiError("license_invalid", "License key not found.", 404);
+  if (!data)
+    throw new ApiError("license_not_found", "License key not found or expired.", 404);
   return data;
 }
 
