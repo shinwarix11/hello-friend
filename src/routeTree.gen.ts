@@ -10,33 +10,502 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as AuthenticatedActivityRouteImport } from './routes/_authenticated/activity'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedDevelopersRouteImport } from './routes/_authenticated/developers'
+import { Route as AuthenticatedLicensesRouteImport } from './routes/_authenticated/licenses'
+import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
+import { Route as AuthenticatedSecurityRouteImport } from './routes/_authenticated/security'
+import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
+import { Route as AuthenticatedApplicationsIndexRouteImport } from './routes/_authenticated/applications.index'
+import { Route as AuthenticatedApplicationsAppIdRouteImport } from './routes/_authenticated/applications.$appId'
+import { Route as AuthenticatedDevelopersIndexRouteImport } from './routes/_authenticated/developers.index'
+import { Route as AuthenticatedDevelopersChangelogRouteImport } from './routes/_authenticated/developers.changelog'
+import { Route as AuthenticatedDevelopersDownloadsRouteImport } from './routes/_authenticated/developers.downloads'
+import { Route as AuthenticatedDevelopersExamplesRouteImport } from './routes/_authenticated/developers.examples'
+import { Route as AuthenticatedDevelopersExplorerRouteImport } from './routes/_authenticated/developers.explorer'
+import { Route as AuthenticatedDevelopersKeysRouteImport } from './routes/_authenticated/developers.keys'
+import { Route as AuthenticatedDevelopersSettingsRouteImport } from './routes/_authenticated/developers.settings'
+import { Route as AuthenticatedDevelopersWebhooksRouteImport } from './routes/_authenticated/developers.webhooks'
+import { Route as AuthenticatedApplicationsAppIdIndexRouteImport } from './routes/_authenticated/applications.$appId.index'
+import { Route as AuthenticatedApplicationsAppIdApiRouteImport } from './routes/_authenticated/applications.$appId.api'
+import { Route as AuthenticatedApplicationsAppIdDownloadsRouteImport } from './routes/_authenticated/applications.$appId.downloads'
+import { Route as AuthenticatedApplicationsAppIdLicensesRouteImport } from './routes/_authenticated/applications.$appId.licenses'
+import { Route as AuthenticatedApplicationsAppIdLogsRouteImport } from './routes/_authenticated/applications.$appId.logs'
+import { Route as AuthenticatedApplicationsAppIdMembersRouteImport } from './routes/_authenticated/applications.$appId.members'
+import { Route as AuthenticatedApplicationsAppIdSettingsRouteImport } from './routes/_authenticated/applications.$appId.settings'
+import { Route as AuthenticatedApplicationsAppIdSubscriptionsRouteImport } from './routes/_authenticated/applications.$appId.subscriptions'
+import { Route as AuthenticatedApplicationsAppIdUsersRouteImport } from './routes/_authenticated/applications.$appId.users'
+import { Route as AuthenticatedApplicationsAppIdVariablesRouteImport } from './routes/_authenticated/applications.$appId.variables'
+import { Route as AuthenticatedApplicationsAppIdVersionsRouteImport } from './routes/_authenticated/applications.$appId.versions'
+import { Route as AuthenticatedApplicationsAppIdWebhooksRouteImport } from './routes/_authenticated/applications.$appId.webhooks'
+import { Route as AuthenticatedDevelopersDocsIndexRouteImport } from './routes/_authenticated/developers.docs.index'
+import { Route as AuthenticatedDevelopersDocsGroupRouteImport } from './routes/_authenticated/developers.docs.$group'
+import { Route as AuthenticatedDevelopersSdksIndexRouteImport } from './routes/_authenticated/developers.sdks.index'
+import { Route as AuthenticatedDevelopersSdksSdkRouteImport } from './routes/_authenticated/developers.sdks.$sdk'
+import { Route as ApiPublicV1SplatRouteImport } from './routes/api/public/v1/$'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedActivityRoute = AuthenticatedActivityRouteImport.update({
+  id: '/activity',
+  path: '/activity',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedDevelopersRoute = AuthenticatedDevelopersRouteImport.update({
+  id: '/developers',
+  path: '/developers',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedLicensesRoute = AuthenticatedLicensesRouteImport.update({
+  id: '/licenses',
+  path: '/licenses',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedSecurityRoute = AuthenticatedSecurityRouteImport.update({
+  id: '/security',
+  path: '/security',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedApplicationsIndexRoute =
+  AuthenticatedApplicationsIndexRouteImport.update({
+    id: '/applications/',
+    path: '/applications/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedApplicationsAppIdRoute =
+  AuthenticatedApplicationsAppIdRouteImport.update({
+    id: '/applications/$appId',
+    path: '/applications/$appId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedDevelopersIndexRoute =
+  AuthenticatedDevelopersIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedDevelopersRoute,
+  } as any)
+const AuthenticatedDevelopersChangelogRoute =
+  AuthenticatedDevelopersChangelogRouteImport.update({
+    id: '/changelog',
+    path: '/changelog',
+    getParentRoute: () => AuthenticatedDevelopersRoute,
+  } as any)
+const AuthenticatedDevelopersDownloadsRoute =
+  AuthenticatedDevelopersDownloadsRouteImport.update({
+    id: '/downloads',
+    path: '/downloads',
+    getParentRoute: () => AuthenticatedDevelopersRoute,
+  } as any)
+const AuthenticatedDevelopersExamplesRoute =
+  AuthenticatedDevelopersExamplesRouteImport.update({
+    id: '/examples',
+    path: '/examples',
+    getParentRoute: () => AuthenticatedDevelopersRoute,
+  } as any)
+const AuthenticatedDevelopersExplorerRoute =
+  AuthenticatedDevelopersExplorerRouteImport.update({
+    id: '/explorer',
+    path: '/explorer',
+    getParentRoute: () => AuthenticatedDevelopersRoute,
+  } as any)
+const AuthenticatedDevelopersKeysRoute =
+  AuthenticatedDevelopersKeysRouteImport.update({
+    id: '/keys',
+    path: '/keys',
+    getParentRoute: () => AuthenticatedDevelopersRoute,
+  } as any)
+const AuthenticatedDevelopersSettingsRoute =
+  AuthenticatedDevelopersSettingsRouteImport.update({
+    id: '/settings',
+    path: '/settings',
+    getParentRoute: () => AuthenticatedDevelopersRoute,
+  } as any)
+const AuthenticatedDevelopersWebhooksRoute =
+  AuthenticatedDevelopersWebhooksRouteImport.update({
+    id: '/webhooks',
+    path: '/webhooks',
+    getParentRoute: () => AuthenticatedDevelopersRoute,
+  } as any)
+const AuthenticatedApplicationsAppIdIndexRoute =
+  AuthenticatedApplicationsAppIdIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedApplicationsAppIdRoute,
+  } as any)
+const AuthenticatedApplicationsAppIdApiRoute =
+  AuthenticatedApplicationsAppIdApiRouteImport.update({
+    id: '/api',
+    path: '/api',
+    getParentRoute: () => AuthenticatedApplicationsAppIdRoute,
+  } as any)
+const AuthenticatedApplicationsAppIdDownloadsRoute =
+  AuthenticatedApplicationsAppIdDownloadsRouteImport.update({
+    id: '/downloads',
+    path: '/downloads',
+    getParentRoute: () => AuthenticatedApplicationsAppIdRoute,
+  } as any)
+const AuthenticatedApplicationsAppIdLicensesRoute =
+  AuthenticatedApplicationsAppIdLicensesRouteImport.update({
+    id: '/licenses',
+    path: '/licenses',
+    getParentRoute: () => AuthenticatedApplicationsAppIdRoute,
+  } as any)
+const AuthenticatedApplicationsAppIdLogsRoute =
+  AuthenticatedApplicationsAppIdLogsRouteImport.update({
+    id: '/logs',
+    path: '/logs',
+    getParentRoute: () => AuthenticatedApplicationsAppIdRoute,
+  } as any)
+const AuthenticatedApplicationsAppIdMembersRoute =
+  AuthenticatedApplicationsAppIdMembersRouteImport.update({
+    id: '/members',
+    path: '/members',
+    getParentRoute: () => AuthenticatedApplicationsAppIdRoute,
+  } as any)
+const AuthenticatedApplicationsAppIdSettingsRoute =
+  AuthenticatedApplicationsAppIdSettingsRouteImport.update({
+    id: '/settings',
+    path: '/settings',
+    getParentRoute: () => AuthenticatedApplicationsAppIdRoute,
+  } as any)
+const AuthenticatedApplicationsAppIdSubscriptionsRoute =
+  AuthenticatedApplicationsAppIdSubscriptionsRouteImport.update({
+    id: '/subscriptions',
+    path: '/subscriptions',
+    getParentRoute: () => AuthenticatedApplicationsAppIdRoute,
+  } as any)
+const AuthenticatedApplicationsAppIdUsersRoute =
+  AuthenticatedApplicationsAppIdUsersRouteImport.update({
+    id: '/users',
+    path: '/users',
+    getParentRoute: () => AuthenticatedApplicationsAppIdRoute,
+  } as any)
+const AuthenticatedApplicationsAppIdVariablesRoute =
+  AuthenticatedApplicationsAppIdVariablesRouteImport.update({
+    id: '/variables',
+    path: '/variables',
+    getParentRoute: () => AuthenticatedApplicationsAppIdRoute,
+  } as any)
+const AuthenticatedApplicationsAppIdVersionsRoute =
+  AuthenticatedApplicationsAppIdVersionsRouteImport.update({
+    id: '/versions',
+    path: '/versions',
+    getParentRoute: () => AuthenticatedApplicationsAppIdRoute,
+  } as any)
+const AuthenticatedApplicationsAppIdWebhooksRoute =
+  AuthenticatedApplicationsAppIdWebhooksRouteImport.update({
+    id: '/webhooks',
+    path: '/webhooks',
+    getParentRoute: () => AuthenticatedApplicationsAppIdRoute,
+  } as any)
+const AuthenticatedDevelopersDocsIndexRoute =
+  AuthenticatedDevelopersDocsIndexRouteImport.update({
+    id: '/docs/',
+    path: '/docs/',
+    getParentRoute: () => AuthenticatedDevelopersRoute,
+  } as any)
+const AuthenticatedDevelopersDocsGroupRoute =
+  AuthenticatedDevelopersDocsGroupRouteImport.update({
+    id: '/docs/$group',
+    path: '/docs/$group',
+    getParentRoute: () => AuthenticatedDevelopersRoute,
+  } as any)
+const AuthenticatedDevelopersSdksIndexRoute =
+  AuthenticatedDevelopersSdksIndexRouteImport.update({
+    id: '/sdks/',
+    path: '/sdks/',
+    getParentRoute: () => AuthenticatedDevelopersRoute,
+  } as any)
+const AuthenticatedDevelopersSdksSdkRoute =
+  AuthenticatedDevelopersSdksSdkRouteImport.update({
+    id: '/sdks/$sdk',
+    path: '/sdks/$sdk',
+    getParentRoute: () => AuthenticatedDevelopersRoute,
+  } as any)
+const ApiPublicV1SplatRoute = ApiPublicV1SplatRouteImport.update({
+  id: '/api/public/v1/$',
+  path: '/api/public/v1/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/activity': typeof AuthenticatedActivityRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/developers': typeof AuthenticatedDevelopersRouteWithChildren
+  '/licenses': typeof AuthenticatedLicensesRoute
+  '/profile': typeof AuthenticatedProfileRoute
+  '/security': typeof AuthenticatedSecurityRoute
+  '/settings': typeof AuthenticatedSettingsRoute
+  '/applications/$appId': typeof AuthenticatedApplicationsAppIdRouteWithChildren
+  '/developers/changelog': typeof AuthenticatedDevelopersChangelogRoute
+  '/developers/downloads': typeof AuthenticatedDevelopersDownloadsRoute
+  '/developers/examples': typeof AuthenticatedDevelopersExamplesRoute
+  '/developers/explorer': typeof AuthenticatedDevelopersExplorerRoute
+  '/developers/keys': typeof AuthenticatedDevelopersKeysRoute
+  '/developers/settings': typeof AuthenticatedDevelopersSettingsRoute
+  '/developers/webhooks': typeof AuthenticatedDevelopersWebhooksRoute
+  '/applications/': typeof AuthenticatedApplicationsIndexRoute
+  '/developers/': typeof AuthenticatedDevelopersIndexRoute
+  '/applications/$appId/api': typeof AuthenticatedApplicationsAppIdApiRoute
+  '/applications/$appId/downloads': typeof AuthenticatedApplicationsAppIdDownloadsRoute
+  '/applications/$appId/licenses': typeof AuthenticatedApplicationsAppIdLicensesRoute
+  '/applications/$appId/logs': typeof AuthenticatedApplicationsAppIdLogsRoute
+  '/applications/$appId/members': typeof AuthenticatedApplicationsAppIdMembersRoute
+  '/applications/$appId/settings': typeof AuthenticatedApplicationsAppIdSettingsRoute
+  '/applications/$appId/subscriptions': typeof AuthenticatedApplicationsAppIdSubscriptionsRoute
+  '/applications/$appId/users': typeof AuthenticatedApplicationsAppIdUsersRoute
+  '/applications/$appId/variables': typeof AuthenticatedApplicationsAppIdVariablesRoute
+  '/applications/$appId/versions': typeof AuthenticatedApplicationsAppIdVersionsRoute
+  '/applications/$appId/webhooks': typeof AuthenticatedApplicationsAppIdWebhooksRoute
+  '/developers/docs/$group': typeof AuthenticatedDevelopersDocsGroupRoute
+  '/developers/sdks/$sdk': typeof AuthenticatedDevelopersSdksSdkRoute
+  '/api/public/v1/$': typeof ApiPublicV1SplatRoute
+  '/applications/$appId/': typeof AuthenticatedApplicationsAppIdIndexRoute
+  '/developers/docs/': typeof AuthenticatedDevelopersDocsIndexRoute
+  '/developers/sdks/': typeof AuthenticatedDevelopersSdksIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/activity': typeof AuthenticatedActivityRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/licenses': typeof AuthenticatedLicensesRoute
+  '/profile': typeof AuthenticatedProfileRoute
+  '/security': typeof AuthenticatedSecurityRoute
+  '/settings': typeof AuthenticatedSettingsRoute
+  '/developers/changelog': typeof AuthenticatedDevelopersChangelogRoute
+  '/developers/downloads': typeof AuthenticatedDevelopersDownloadsRoute
+  '/developers/examples': typeof AuthenticatedDevelopersExamplesRoute
+  '/developers/explorer': typeof AuthenticatedDevelopersExplorerRoute
+  '/developers/keys': typeof AuthenticatedDevelopersKeysRoute
+  '/developers/settings': typeof AuthenticatedDevelopersSettingsRoute
+  '/developers/webhooks': typeof AuthenticatedDevelopersWebhooksRoute
+  '/applications': typeof AuthenticatedApplicationsIndexRoute
+  '/developers': typeof AuthenticatedDevelopersIndexRoute
+  '/applications/$appId/api': typeof AuthenticatedApplicationsAppIdApiRoute
+  '/applications/$appId/downloads': typeof AuthenticatedApplicationsAppIdDownloadsRoute
+  '/applications/$appId/licenses': typeof AuthenticatedApplicationsAppIdLicensesRoute
+  '/applications/$appId/logs': typeof AuthenticatedApplicationsAppIdLogsRoute
+  '/applications/$appId/members': typeof AuthenticatedApplicationsAppIdMembersRoute
+  '/applications/$appId/settings': typeof AuthenticatedApplicationsAppIdSettingsRoute
+  '/applications/$appId/subscriptions': typeof AuthenticatedApplicationsAppIdSubscriptionsRoute
+  '/applications/$appId/users': typeof AuthenticatedApplicationsAppIdUsersRoute
+  '/applications/$appId/variables': typeof AuthenticatedApplicationsAppIdVariablesRoute
+  '/applications/$appId/versions': typeof AuthenticatedApplicationsAppIdVersionsRoute
+  '/applications/$appId/webhooks': typeof AuthenticatedApplicationsAppIdWebhooksRoute
+  '/developers/docs/$group': typeof AuthenticatedDevelopersDocsGroupRoute
+  '/developers/sdks/$sdk': typeof AuthenticatedDevelopersSdksSdkRoute
+  '/api/public/v1/$': typeof ApiPublicV1SplatRoute
+  '/applications/$appId': typeof AuthenticatedApplicationsAppIdIndexRoute
+  '/developers/docs': typeof AuthenticatedDevelopersDocsIndexRoute
+  '/developers/sdks': typeof AuthenticatedDevelopersSdksIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/_authenticated/activity': typeof AuthenticatedActivityRoute
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/developers': typeof AuthenticatedDevelopersRouteWithChildren
+  '/_authenticated/licenses': typeof AuthenticatedLicensesRoute
+  '/_authenticated/profile': typeof AuthenticatedProfileRoute
+  '/_authenticated/security': typeof AuthenticatedSecurityRoute
+  '/_authenticated/settings': typeof AuthenticatedSettingsRoute
+  '/_authenticated/applications/$appId': typeof AuthenticatedApplicationsAppIdRouteWithChildren
+  '/_authenticated/developers/changelog': typeof AuthenticatedDevelopersChangelogRoute
+  '/_authenticated/developers/downloads': typeof AuthenticatedDevelopersDownloadsRoute
+  '/_authenticated/developers/examples': typeof AuthenticatedDevelopersExamplesRoute
+  '/_authenticated/developers/explorer': typeof AuthenticatedDevelopersExplorerRoute
+  '/_authenticated/developers/keys': typeof AuthenticatedDevelopersKeysRoute
+  '/_authenticated/developers/settings': typeof AuthenticatedDevelopersSettingsRoute
+  '/_authenticated/developers/webhooks': typeof AuthenticatedDevelopersWebhooksRoute
+  '/_authenticated/applications/': typeof AuthenticatedApplicationsIndexRoute
+  '/_authenticated/developers/': typeof AuthenticatedDevelopersIndexRoute
+  '/_authenticated/applications/$appId/api': typeof AuthenticatedApplicationsAppIdApiRoute
+  '/_authenticated/applications/$appId/downloads': typeof AuthenticatedApplicationsAppIdDownloadsRoute
+  '/_authenticated/applications/$appId/licenses': typeof AuthenticatedApplicationsAppIdLicensesRoute
+  '/_authenticated/applications/$appId/logs': typeof AuthenticatedApplicationsAppIdLogsRoute
+  '/_authenticated/applications/$appId/members': typeof AuthenticatedApplicationsAppIdMembersRoute
+  '/_authenticated/applications/$appId/settings': typeof AuthenticatedApplicationsAppIdSettingsRoute
+  '/_authenticated/applications/$appId/subscriptions': typeof AuthenticatedApplicationsAppIdSubscriptionsRoute
+  '/_authenticated/applications/$appId/users': typeof AuthenticatedApplicationsAppIdUsersRoute
+  '/_authenticated/applications/$appId/variables': typeof AuthenticatedApplicationsAppIdVariablesRoute
+  '/_authenticated/applications/$appId/versions': typeof AuthenticatedApplicationsAppIdVersionsRoute
+  '/_authenticated/applications/$appId/webhooks': typeof AuthenticatedApplicationsAppIdWebhooksRoute
+  '/_authenticated/developers/docs/$group': typeof AuthenticatedDevelopersDocsGroupRoute
+  '/_authenticated/developers/sdks/$sdk': typeof AuthenticatedDevelopersSdksSdkRoute
+  '/api/public/v1/$': typeof ApiPublicV1SplatRoute
+  '/_authenticated/applications/$appId/': typeof AuthenticatedApplicationsAppIdIndexRoute
+  '/_authenticated/developers/docs/': typeof AuthenticatedDevelopersDocsIndexRoute
+  '/_authenticated/developers/sdks/': typeof AuthenticatedDevelopersSdksIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/reset-password'
+    | '/activity'
+    | '/dashboard'
+    | '/developers'
+    | '/licenses'
+    | '/profile'
+    | '/security'
+    | '/settings'
+    | '/applications/$appId'
+    | '/developers/changelog'
+    | '/developers/downloads'
+    | '/developers/examples'
+    | '/developers/explorer'
+    | '/developers/keys'
+    | '/developers/settings'
+    | '/developers/webhooks'
+    | '/applications/'
+    | '/developers/'
+    | '/applications/$appId/api'
+    | '/applications/$appId/downloads'
+    | '/applications/$appId/licenses'
+    | '/applications/$appId/logs'
+    | '/applications/$appId/members'
+    | '/applications/$appId/settings'
+    | '/applications/$appId/subscriptions'
+    | '/applications/$appId/users'
+    | '/applications/$appId/variables'
+    | '/applications/$appId/versions'
+    | '/applications/$appId/webhooks'
+    | '/developers/docs/$group'
+    | '/developers/sdks/$sdk'
+    | '/api/public/v1/$'
+    | '/applications/$appId/'
+    | '/developers/docs/'
+    | '/developers/sdks/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/auth'
+    | '/reset-password'
+    | '/activity'
+    | '/dashboard'
+    | '/licenses'
+    | '/profile'
+    | '/security'
+    | '/settings'
+    | '/developers/changelog'
+    | '/developers/downloads'
+    | '/developers/examples'
+    | '/developers/explorer'
+    | '/developers/keys'
+    | '/developers/settings'
+    | '/developers/webhooks'
+    | '/applications'
+    | '/developers'
+    | '/applications/$appId/api'
+    | '/applications/$appId/downloads'
+    | '/applications/$appId/licenses'
+    | '/applications/$appId/logs'
+    | '/applications/$appId/members'
+    | '/applications/$appId/settings'
+    | '/applications/$appId/subscriptions'
+    | '/applications/$appId/users'
+    | '/applications/$appId/variables'
+    | '/applications/$appId/versions'
+    | '/applications/$appId/webhooks'
+    | '/developers/docs/$group'
+    | '/developers/sdks/$sdk'
+    | '/api/public/v1/$'
+    | '/applications/$appId'
+    | '/developers/docs'
+    | '/developers/sdks'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/auth'
+    | '/reset-password'
+    | '/_authenticated/activity'
+    | '/_authenticated/dashboard'
+    | '/_authenticated/developers'
+    | '/_authenticated/licenses'
+    | '/_authenticated/profile'
+    | '/_authenticated/security'
+    | '/_authenticated/settings'
+    | '/_authenticated/applications/$appId'
+    | '/_authenticated/developers/changelog'
+    | '/_authenticated/developers/downloads'
+    | '/_authenticated/developers/examples'
+    | '/_authenticated/developers/explorer'
+    | '/_authenticated/developers/keys'
+    | '/_authenticated/developers/settings'
+    | '/_authenticated/developers/webhooks'
+    | '/_authenticated/applications/'
+    | '/_authenticated/developers/'
+    | '/_authenticated/applications/$appId/api'
+    | '/_authenticated/applications/$appId/downloads'
+    | '/_authenticated/applications/$appId/licenses'
+    | '/_authenticated/applications/$appId/logs'
+    | '/_authenticated/applications/$appId/members'
+    | '/_authenticated/applications/$appId/settings'
+    | '/_authenticated/applications/$appId/subscriptions'
+    | '/_authenticated/applications/$appId/users'
+    | '/_authenticated/applications/$appId/variables'
+    | '/_authenticated/applications/$appId/versions'
+    | '/_authenticated/applications/$appId/webhooks'
+    | '/_authenticated/developers/docs/$group'
+    | '/_authenticated/developers/sdks/$sdk'
+    | '/api/public/v1/$'
+    | '/_authenticated/applications/$appId/'
+    | '/_authenticated/developers/docs/'
+    | '/_authenticated/developers/sdks/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
+  ApiPublicV1SplatRoute: typeof ApiPublicV1SplatRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,22 +517,392 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/activity': {
+      id: '/_authenticated/activity'
+      path: '/activity'
+      fullPath: '/activity'
+      preLoaderRoute: typeof AuthenticatedActivityRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/developers': {
+      id: '/_authenticated/developers'
+      path: '/developers'
+      fullPath: '/developers'
+      preLoaderRoute: typeof AuthenticatedDevelopersRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/licenses': {
+      id: '/_authenticated/licenses'
+      path: '/licenses'
+      fullPath: '/licenses'
+      preLoaderRoute: typeof AuthenticatedLicensesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/profile': {
+      id: '/_authenticated/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof AuthenticatedProfileRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/security': {
+      id: '/_authenticated/security'
+      path: '/security'
+      fullPath: '/security'
+      preLoaderRoute: typeof AuthenticatedSecurityRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/settings': {
+      id: '/_authenticated/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AuthenticatedSettingsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/applications/': {
+      id: '/_authenticated/applications/'
+      path: '/applications'
+      fullPath: '/applications/'
+      preLoaderRoute: typeof AuthenticatedApplicationsIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/applications/$appId': {
+      id: '/_authenticated/applications/$appId'
+      path: '/applications/$appId'
+      fullPath: '/applications/$appId'
+      preLoaderRoute: typeof AuthenticatedApplicationsAppIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/developers/': {
+      id: '/_authenticated/developers/'
+      path: '/'
+      fullPath: '/developers/'
+      preLoaderRoute: typeof AuthenticatedDevelopersIndexRouteImport
+      parentRoute: typeof AuthenticatedDevelopersRoute
+    }
+    '/_authenticated/developers/changelog': {
+      id: '/_authenticated/developers/changelog'
+      path: '/changelog'
+      fullPath: '/developers/changelog'
+      preLoaderRoute: typeof AuthenticatedDevelopersChangelogRouteImport
+      parentRoute: typeof AuthenticatedDevelopersRoute
+    }
+    '/_authenticated/developers/downloads': {
+      id: '/_authenticated/developers/downloads'
+      path: '/downloads'
+      fullPath: '/developers/downloads'
+      preLoaderRoute: typeof AuthenticatedDevelopersDownloadsRouteImport
+      parentRoute: typeof AuthenticatedDevelopersRoute
+    }
+    '/_authenticated/developers/examples': {
+      id: '/_authenticated/developers/examples'
+      path: '/examples'
+      fullPath: '/developers/examples'
+      preLoaderRoute: typeof AuthenticatedDevelopersExamplesRouteImport
+      parentRoute: typeof AuthenticatedDevelopersRoute
+    }
+    '/_authenticated/developers/explorer': {
+      id: '/_authenticated/developers/explorer'
+      path: '/explorer'
+      fullPath: '/developers/explorer'
+      preLoaderRoute: typeof AuthenticatedDevelopersExplorerRouteImport
+      parentRoute: typeof AuthenticatedDevelopersRoute
+    }
+    '/_authenticated/developers/keys': {
+      id: '/_authenticated/developers/keys'
+      path: '/keys'
+      fullPath: '/developers/keys'
+      preLoaderRoute: typeof AuthenticatedDevelopersKeysRouteImport
+      parentRoute: typeof AuthenticatedDevelopersRoute
+    }
+    '/_authenticated/developers/settings': {
+      id: '/_authenticated/developers/settings'
+      path: '/settings'
+      fullPath: '/developers/settings'
+      preLoaderRoute: typeof AuthenticatedDevelopersSettingsRouteImport
+      parentRoute: typeof AuthenticatedDevelopersRoute
+    }
+    '/_authenticated/developers/webhooks': {
+      id: '/_authenticated/developers/webhooks'
+      path: '/webhooks'
+      fullPath: '/developers/webhooks'
+      preLoaderRoute: typeof AuthenticatedDevelopersWebhooksRouteImport
+      parentRoute: typeof AuthenticatedDevelopersRoute
+    }
+    '/_authenticated/applications/$appId/': {
+      id: '/_authenticated/applications/$appId/'
+      path: '/'
+      fullPath: '/applications/$appId/'
+      preLoaderRoute: typeof AuthenticatedApplicationsAppIdIndexRouteImport
+      parentRoute: typeof AuthenticatedApplicationsAppIdRoute
+    }
+    '/_authenticated/applications/$appId/api': {
+      id: '/_authenticated/applications/$appId/api'
+      path: '/api'
+      fullPath: '/applications/$appId/api'
+      preLoaderRoute: typeof AuthenticatedApplicationsAppIdApiRouteImport
+      parentRoute: typeof AuthenticatedApplicationsAppIdRoute
+    }
+    '/_authenticated/applications/$appId/downloads': {
+      id: '/_authenticated/applications/$appId/downloads'
+      path: '/downloads'
+      fullPath: '/applications/$appId/downloads'
+      preLoaderRoute: typeof AuthenticatedApplicationsAppIdDownloadsRouteImport
+      parentRoute: typeof AuthenticatedApplicationsAppIdRoute
+    }
+    '/_authenticated/applications/$appId/licenses': {
+      id: '/_authenticated/applications/$appId/licenses'
+      path: '/licenses'
+      fullPath: '/applications/$appId/licenses'
+      preLoaderRoute: typeof AuthenticatedApplicationsAppIdLicensesRouteImport
+      parentRoute: typeof AuthenticatedApplicationsAppIdRoute
+    }
+    '/_authenticated/applications/$appId/logs': {
+      id: '/_authenticated/applications/$appId/logs'
+      path: '/logs'
+      fullPath: '/applications/$appId/logs'
+      preLoaderRoute: typeof AuthenticatedApplicationsAppIdLogsRouteImport
+      parentRoute: typeof AuthenticatedApplicationsAppIdRoute
+    }
+    '/_authenticated/applications/$appId/members': {
+      id: '/_authenticated/applications/$appId/members'
+      path: '/members'
+      fullPath: '/applications/$appId/members'
+      preLoaderRoute: typeof AuthenticatedApplicationsAppIdMembersRouteImport
+      parentRoute: typeof AuthenticatedApplicationsAppIdRoute
+    }
+    '/_authenticated/applications/$appId/settings': {
+      id: '/_authenticated/applications/$appId/settings'
+      path: '/settings'
+      fullPath: '/applications/$appId/settings'
+      preLoaderRoute: typeof AuthenticatedApplicationsAppIdSettingsRouteImport
+      parentRoute: typeof AuthenticatedApplicationsAppIdRoute
+    }
+    '/_authenticated/applications/$appId/subscriptions': {
+      id: '/_authenticated/applications/$appId/subscriptions'
+      path: '/subscriptions'
+      fullPath: '/applications/$appId/subscriptions'
+      preLoaderRoute: typeof AuthenticatedApplicationsAppIdSubscriptionsRouteImport
+      parentRoute: typeof AuthenticatedApplicationsAppIdRoute
+    }
+    '/_authenticated/applications/$appId/users': {
+      id: '/_authenticated/applications/$appId/users'
+      path: '/users'
+      fullPath: '/applications/$appId/users'
+      preLoaderRoute: typeof AuthenticatedApplicationsAppIdUsersRouteImport
+      parentRoute: typeof AuthenticatedApplicationsAppIdRoute
+    }
+    '/_authenticated/applications/$appId/variables': {
+      id: '/_authenticated/applications/$appId/variables'
+      path: '/variables'
+      fullPath: '/applications/$appId/variables'
+      preLoaderRoute: typeof AuthenticatedApplicationsAppIdVariablesRouteImport
+      parentRoute: typeof AuthenticatedApplicationsAppIdRoute
+    }
+    '/_authenticated/applications/$appId/versions': {
+      id: '/_authenticated/applications/$appId/versions'
+      path: '/versions'
+      fullPath: '/applications/$appId/versions'
+      preLoaderRoute: typeof AuthenticatedApplicationsAppIdVersionsRouteImport
+      parentRoute: typeof AuthenticatedApplicationsAppIdRoute
+    }
+    '/_authenticated/applications/$appId/webhooks': {
+      id: '/_authenticated/applications/$appId/webhooks'
+      path: '/webhooks'
+      fullPath: '/applications/$appId/webhooks'
+      preLoaderRoute: typeof AuthenticatedApplicationsAppIdWebhooksRouteImport
+      parentRoute: typeof AuthenticatedApplicationsAppIdRoute
+    }
+    '/_authenticated/developers/docs/': {
+      id: '/_authenticated/developers/docs/'
+      path: '/docs'
+      fullPath: '/developers/docs/'
+      preLoaderRoute: typeof AuthenticatedDevelopersDocsIndexRouteImport
+      parentRoute: typeof AuthenticatedDevelopersRoute
+    }
+    '/_authenticated/developers/docs/$group': {
+      id: '/_authenticated/developers/docs/$group'
+      path: '/docs/$group'
+      fullPath: '/developers/docs/$group'
+      preLoaderRoute: typeof AuthenticatedDevelopersDocsGroupRouteImport
+      parentRoute: typeof AuthenticatedDevelopersRoute
+    }
+    '/_authenticated/developers/sdks/': {
+      id: '/_authenticated/developers/sdks/'
+      path: '/sdks'
+      fullPath: '/developers/sdks/'
+      preLoaderRoute: typeof AuthenticatedDevelopersSdksIndexRouteImport
+      parentRoute: typeof AuthenticatedDevelopersRoute
+    }
+    '/_authenticated/developers/sdks/$sdk': {
+      id: '/_authenticated/developers/sdks/$sdk'
+      path: '/sdks/$sdk'
+      fullPath: '/developers/sdks/$sdk'
+      preLoaderRoute: typeof AuthenticatedDevelopersSdksSdkRouteImport
+      parentRoute: typeof AuthenticatedDevelopersRoute
+    }
+    '/api/public/v1/$': {
+      id: '/api/public/v1/$'
+      path: '/api/public/v1/$'
+      fullPath: '/api/public/v1/$'
+      preLoaderRoute: typeof ApiPublicV1SplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
+interface AuthenticatedDevelopersRouteChildren {
+  AuthenticatedDevelopersChangelogRoute: typeof AuthenticatedDevelopersChangelogRoute
+  AuthenticatedDevelopersDownloadsRoute: typeof AuthenticatedDevelopersDownloadsRoute
+  AuthenticatedDevelopersExamplesRoute: typeof AuthenticatedDevelopersExamplesRoute
+  AuthenticatedDevelopersExplorerRoute: typeof AuthenticatedDevelopersExplorerRoute
+  AuthenticatedDevelopersKeysRoute: typeof AuthenticatedDevelopersKeysRoute
+  AuthenticatedDevelopersSettingsRoute: typeof AuthenticatedDevelopersSettingsRoute
+  AuthenticatedDevelopersWebhooksRoute: typeof AuthenticatedDevelopersWebhooksRoute
+  AuthenticatedDevelopersIndexRoute: typeof AuthenticatedDevelopersIndexRoute
+  AuthenticatedDevelopersDocsGroupRoute: typeof AuthenticatedDevelopersDocsGroupRoute
+  AuthenticatedDevelopersSdksSdkRoute: typeof AuthenticatedDevelopersSdksSdkRoute
+  AuthenticatedDevelopersDocsIndexRoute: typeof AuthenticatedDevelopersDocsIndexRoute
+  AuthenticatedDevelopersSdksIndexRoute: typeof AuthenticatedDevelopersSdksIndexRoute
+}
+
+const AuthenticatedDevelopersRouteChildren: AuthenticatedDevelopersRouteChildren =
+  {
+    AuthenticatedDevelopersChangelogRoute:
+      AuthenticatedDevelopersChangelogRoute,
+    AuthenticatedDevelopersDownloadsRoute:
+      AuthenticatedDevelopersDownloadsRoute,
+    AuthenticatedDevelopersExamplesRoute: AuthenticatedDevelopersExamplesRoute,
+    AuthenticatedDevelopersExplorerRoute: AuthenticatedDevelopersExplorerRoute,
+    AuthenticatedDevelopersKeysRoute: AuthenticatedDevelopersKeysRoute,
+    AuthenticatedDevelopersSettingsRoute: AuthenticatedDevelopersSettingsRoute,
+    AuthenticatedDevelopersWebhooksRoute: AuthenticatedDevelopersWebhooksRoute,
+    AuthenticatedDevelopersIndexRoute: AuthenticatedDevelopersIndexRoute,
+    AuthenticatedDevelopersDocsGroupRoute:
+      AuthenticatedDevelopersDocsGroupRoute,
+    AuthenticatedDevelopersSdksSdkRoute: AuthenticatedDevelopersSdksSdkRoute,
+    AuthenticatedDevelopersDocsIndexRoute:
+      AuthenticatedDevelopersDocsIndexRoute,
+    AuthenticatedDevelopersSdksIndexRoute:
+      AuthenticatedDevelopersSdksIndexRoute,
+  }
+
+const AuthenticatedDevelopersRouteWithChildren =
+  AuthenticatedDevelopersRoute._addFileChildren(
+    AuthenticatedDevelopersRouteChildren,
+  )
+
+interface AuthenticatedApplicationsAppIdRouteChildren {
+  AuthenticatedApplicationsAppIdApiRoute: typeof AuthenticatedApplicationsAppIdApiRoute
+  AuthenticatedApplicationsAppIdDownloadsRoute: typeof AuthenticatedApplicationsAppIdDownloadsRoute
+  AuthenticatedApplicationsAppIdLicensesRoute: typeof AuthenticatedApplicationsAppIdLicensesRoute
+  AuthenticatedApplicationsAppIdLogsRoute: typeof AuthenticatedApplicationsAppIdLogsRoute
+  AuthenticatedApplicationsAppIdMembersRoute: typeof AuthenticatedApplicationsAppIdMembersRoute
+  AuthenticatedApplicationsAppIdSettingsRoute: typeof AuthenticatedApplicationsAppIdSettingsRoute
+  AuthenticatedApplicationsAppIdSubscriptionsRoute: typeof AuthenticatedApplicationsAppIdSubscriptionsRoute
+  AuthenticatedApplicationsAppIdUsersRoute: typeof AuthenticatedApplicationsAppIdUsersRoute
+  AuthenticatedApplicationsAppIdVariablesRoute: typeof AuthenticatedApplicationsAppIdVariablesRoute
+  AuthenticatedApplicationsAppIdVersionsRoute: typeof AuthenticatedApplicationsAppIdVersionsRoute
+  AuthenticatedApplicationsAppIdWebhooksRoute: typeof AuthenticatedApplicationsAppIdWebhooksRoute
+  AuthenticatedApplicationsAppIdIndexRoute: typeof AuthenticatedApplicationsAppIdIndexRoute
+}
+
+const AuthenticatedApplicationsAppIdRouteChildren: AuthenticatedApplicationsAppIdRouteChildren =
+  {
+    AuthenticatedApplicationsAppIdApiRoute:
+      AuthenticatedApplicationsAppIdApiRoute,
+    AuthenticatedApplicationsAppIdDownloadsRoute:
+      AuthenticatedApplicationsAppIdDownloadsRoute,
+    AuthenticatedApplicationsAppIdLicensesRoute:
+      AuthenticatedApplicationsAppIdLicensesRoute,
+    AuthenticatedApplicationsAppIdLogsRoute:
+      AuthenticatedApplicationsAppIdLogsRoute,
+    AuthenticatedApplicationsAppIdMembersRoute:
+      AuthenticatedApplicationsAppIdMembersRoute,
+    AuthenticatedApplicationsAppIdSettingsRoute:
+      AuthenticatedApplicationsAppIdSettingsRoute,
+    AuthenticatedApplicationsAppIdSubscriptionsRoute:
+      AuthenticatedApplicationsAppIdSubscriptionsRoute,
+    AuthenticatedApplicationsAppIdUsersRoute:
+      AuthenticatedApplicationsAppIdUsersRoute,
+    AuthenticatedApplicationsAppIdVariablesRoute:
+      AuthenticatedApplicationsAppIdVariablesRoute,
+    AuthenticatedApplicationsAppIdVersionsRoute:
+      AuthenticatedApplicationsAppIdVersionsRoute,
+    AuthenticatedApplicationsAppIdWebhooksRoute:
+      AuthenticatedApplicationsAppIdWebhooksRoute,
+    AuthenticatedApplicationsAppIdIndexRoute:
+      AuthenticatedApplicationsAppIdIndexRoute,
+  }
+
+const AuthenticatedApplicationsAppIdRouteWithChildren =
+  AuthenticatedApplicationsAppIdRoute._addFileChildren(
+    AuthenticatedApplicationsAppIdRouteChildren,
+  )
+
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedActivityRoute: typeof AuthenticatedActivityRoute
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedDevelopersRoute: typeof AuthenticatedDevelopersRouteWithChildren
+  AuthenticatedLicensesRoute: typeof AuthenticatedLicensesRoute
+  AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
+  AuthenticatedSecurityRoute: typeof AuthenticatedSecurityRoute
+  AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
+  AuthenticatedApplicationsAppIdRoute: typeof AuthenticatedApplicationsAppIdRouteWithChildren
+  AuthenticatedApplicationsIndexRoute: typeof AuthenticatedApplicationsIndexRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedActivityRoute: AuthenticatedActivityRoute,
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedDevelopersRoute: AuthenticatedDevelopersRouteWithChildren,
+  AuthenticatedLicensesRoute: AuthenticatedLicensesRoute,
+  AuthenticatedProfileRoute: AuthenticatedProfileRoute,
+  AuthenticatedSecurityRoute: AuthenticatedSecurityRoute,
+  AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
+  AuthenticatedApplicationsAppIdRoute:
+    AuthenticatedApplicationsAppIdRouteWithChildren,
+  AuthenticatedApplicationsIndexRoute: AuthenticatedApplicationsIndexRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
+  ApiPublicV1SplatRoute: ApiPublicV1SplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

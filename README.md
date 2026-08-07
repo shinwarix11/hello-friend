@@ -1,12 +1,12 @@
-# Hello Friend
+# Secure Access Portal
 
-hi
+AUTH PROJECT
 
 This project was built with [Lovable](https://lovable.dev).
 
 ## Build with Lovable
 
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/9347818a-431f-4584-98ac-b0d367707e9b).
+Continue developing this project in the [Lovable editor](https://lovable.dev/projects/36d50108-cb3f-4329-9919-05babbc3b650).
 
 - **Ship faster**: describe what you want to build and Lovable handles the code.
 - **Stay in sync**: every change made in Lovable is committed straight to this repository.
