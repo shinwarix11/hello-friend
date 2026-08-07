@@ -328,31 +328,24 @@ namespace AegisAuth
         /// <summary>Calls an endpoint, normalises the envelope, and fills <see cref="response"/>.</summary>
         private T req<T>(string endpoint, Dictionary<string, string> body) where T : class, new()
         {
+            int statusCode = 0;
+            string statusText = string.Empty;
+            string text = null;
             try
             {
                 var request = new HttpRequestMessage(HttpMethod.Post, _baseUrl + endpoint);
                 request.Content = new StringContent(Json.WriteFlat(body), Encoding.UTF8, "application/json");
                 request.Headers.TryAddWithoutValidation("x-app-key", ownerid);
+                request.Headers.TryAddWithoutValidation("x-app-name", name);
                 if (!string.IsNullOrEmpty(secret)) request.Headers.TryAddWithoutValidation("x-api-key", secret);
                 if (!string.IsNullOrEmpty(sessionid)) request.Headers.TryAddWithoutValidation("x-session-token", sessionid);
                 request.Headers.TryAddWithoutValidation("x-timestamp", DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString());
                 request.Headers.TryAddWithoutValidation("user-agent", "aegisauth-csharp/1.0.0");
 
-                var text = Task.Run(() => _http.SendAsync(request)).GetAwaiter().GetResult()
-                    .Content.ReadAsStringAsync().GetAwaiter().GetResult();
-
-                var envelope = Json.Read<Envelope<T>>(text) ?? new Envelope<T>();
-                if (!envelope.Success)
-                {
-                    response.success = false;
-                    response.message = envelope.Error != null && !string.IsNullOrEmpty(envelope.Error.Message)
-                        ? envelope.Error.Message
-                        : "Request failed.";
-                    return null;
-                }
-                response.success = true;
-                response.message = "Success";
-                return envelope.Data ?? new T();
+                var httpResponse = Task.Run(() => _http.SendAsync(request)).GetAwaiter().GetResult();
+                statusCode = (int)httpResponse.StatusCode;
+                statusText = httpResponse.ReasonPhrase ?? httpResponse.StatusCode.ToString();
+                text = httpResponse.Content.ReadAsStringAsync().GetAwaiter().GetResult();
             }
             catch (Exception ex)
             {
@@ -360,6 +353,35 @@ namespace AegisAuth
                 response.message = "Network error: " + ex.Message;
                 return null;
             }
+
+            var envelope = Json.Read<Envelope<T>>(text);
+            if (envelope != null && envelope.Success)
+            {
+                response.success = true;
+                response.message = "Success";
+                return envelope.Data ?? new T();
+            }
+
+            // Error path — surface the most descriptive message available:
+            //  1. the standard envelope's error.message
+            //  2. fallback JSON fields: root["message"] or a plain-string root["error"]
+            //  3. the exact HTTP status code plus the server's raw response text
+            string message = null;
+            if (envelope != null && envelope.Error != null && !string.IsNullOrWhiteSpace(envelope.Error.Message))
+                message = envelope.Error.Message;
+            if (string.IsNullOrWhiteSpace(message))
+                message = Json.ExtractString(text, "message");
+            if (string.IsNullOrWhiteSpace(message))
+                message = Json.ExtractString(text, "error");
+            if (string.IsNullOrWhiteSpace(message) && (statusCode < 200 || statusCode >= 300))
+                message = "HTTP " + statusCode + " " + statusText +
+                    (string.IsNullOrWhiteSpace(text) ? string.Empty : ": " + Json.Truncate(text.Trim(), 300));
+            if (string.IsNullOrWhiteSpace(message))
+                message = "Request failed (HTTP " + statusCode + " " + statusText + ").";
+
+            response.success = false;
+            response.message = message;
+            return null;
         }
 
         /// <summary>Records an error in <see cref="response"/> and mirrors it to the console/debugger.</summary>
@@ -704,6 +726,63 @@ namespace AegisAuth
             {
                 return null;
             }
+        }
+
+        /// <summary>
+        /// Extracts a string field from a JSON document without a full parse.
+        /// Used as a fallback when the standard envelope cannot be deserialized
+        /// (e.g. "error" returned as a plain string, or a non-DCJS shape).
+        /// </summary>
+        public static string ExtractString(string json, string key)
+        {
+            if (string.IsNullOrEmpty(json)) return null;
+            var match = System.Text.RegularExpressions.Regex.Match(
+                json,
+                "\"" + System.Text.RegularExpressions.Regex.Escape(key) + "\"\\s*:\\s*\"((?:[^\"\\\\]|\\\\.)*)\"",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            return match.Success ? Unescape(match.Groups[1].Value) : null;
+        }
+
+        /// <summary>Truncates raw response text so error messages stay readable.</summary>
+        public static string Truncate(string value, int max)
+        {
+            if (string.IsNullOrEmpty(value) || value.Length <= max) return value;
+            return value.Substring(0, max) + "…";
+        }
+
+        private static string Unescape(string value)
+        {
+            var builder = new StringBuilder(value.Length);
+            for (var i = 0; i < value.Length; i++)
+            {
+                var c = value[i];
+                if (c != '\\' || i + 1 >= value.Length)
+                {
+                    builder.Append(c);
+                    continue;
+                }
+                var n = value[++i];
+                switch (n)
+                {
+                    case '"': builder.Append('"'); break;
+                    case '\\': builder.Append('\\'); break;
+                    case '/': builder.Append('/'); break;
+                    case 'b': builder.Append('\b'); break;
+                    case 'f': builder.Append('\f'); break;
+                    case 'n': builder.Append('\n'); break;
+                    case 'r': builder.Append('\r'); break;
+                    case 't': builder.Append('\t'); break;
+                    case 'u':
+                        if (i + 4 < value.Length)
+                        {
+                            builder.Append((char)Convert.ToInt32(value.Substring(i + 1, 4), 16));
+                            i += 4;
+                        }
+                        break;
+                    default: builder.Append(n); break;
+                }
+            }
+            return builder.ToString();
         }
     }
 }

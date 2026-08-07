@@ -40,15 +40,20 @@ export class ApiError extends Error {
   }
 }
 
+const CORS_HEADERS: Record<string, string> = {
+  "access-control-allow-origin": "*",
+  "access-control-allow-headers":
+    "content-type, authorization, user-agent, x-app-key, x-app-name, x-api-key, x-session-token, x-timestamp, x-nonce, x-signature",
+  "access-control-allow-methods": "POST, GET, OPTIONS",
+  "access-control-max-age": "86400",
+};
+
 function json(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), {
     status,
     headers: {
       "content-type": "application/json; charset=utf-8",
-      "access-control-allow-origin": "*",
-      "access-control-allow-headers":
-        "content-type, x-app-key, x-api-key, x-session-token, x-timestamp, x-nonce, x-signature",
-      "access-control-allow-methods": "POST, GET, OPTIONS",
+      ...CORS_HEADERS,
       "cache-control": "no-store",
     },
   });
@@ -241,7 +246,8 @@ async function findLicense(ctx: Ctx, key: string) {
     .eq("application_id", ctx.app.id)
     .eq("license_key", key)
     .maybeSingle();
-  if (!data) throw new ApiError("license_invalid", "License key not found.", 404);
+  if (!data)
+    throw new ApiError("license_not_found", "License key not found or expired.", 404);
   return data;
 }
 
@@ -859,7 +865,14 @@ export const API_ENDPOINTS = Object.keys(handlers);
 
 export async function handleApiRequest(endpoint: string, request: Request): Promise<Response> {
   const startedAt = Date.now();
-  if (request.method === "OPTIONS") return json({ success: true }, 204);
+  // Preflight: a 204 must have a null body — a JSON body here makes the
+  // runtime throw, which is what surfaced to SDKs as "Request failed.".
+  if (request.method === "OPTIONS") {
+    return new Response(null, {
+      status: 204,
+      headers: { ...CORS_HEADERS, "cache-control": "no-store" },
+    });
+  }
 
   const handler = handlers[endpoint];
   if (!handler) return fail("not_found", `Unknown endpoint "${endpoint}".`, 404);
@@ -885,7 +898,20 @@ export async function handleApiRequest(endpoint: string, request: Request): Prom
   if (!appKey) return fail("unauthorized", "Missing application key (x-app-key).", 401);
 
   const { data: app } = await admin.from("applications").select("*").eq("public_key", appKey).maybeSingle();
-  if (!app) return fail("unauthorized", "Unknown application key.", 401);
+  if (!app) return fail("not_found", "Application or License key not found.", 404);
+
+  // Optional application-name verification (KeyAuth-style name+key binding).
+  // Only enforced when the client actually sends a name.
+  const presentedName =
+    request.headers.get("x-app-name") ??
+    (typeof body["app_name"] === "string" ? (body["app_name"] as string) : null);
+  if (
+    presentedName &&
+    presentedName.localeCompare(app.name, undefined, { sensitivity: "accent" }) !== 0 &&
+    presentedName !== app.internal_name
+  ) {
+    return fail("not_found", "Application or License key not found.", 404);
+  }
 
   const ip =
     request.headers.get("cf-connecting-ip") ??
