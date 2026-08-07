@@ -26,8 +26,8 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://project--9347818a-431f-4584-98ac-b0d367707e9b.lovable.app"
-Documentation = "https://project--9347818a-431f-4584-98ac-b0d367707e9b.lovable.app/developers/docs"
+Homepage = "https://project--9347818a-431f-4584-98ac-b0d367707e9b-dev.lovable.app"
+Documentation = "https://project--9347818a-431f-4584-98ac-b0d367707e9b-dev.lovable.app/developers/docs"
 
 # Single-module distribution: the whole SDK is aegis_auth.py
 [tool.setuptools]
